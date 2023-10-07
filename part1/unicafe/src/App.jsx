@@ -7,44 +7,24 @@ const Button = ({ handleClick, text }) => (
 );
 
 function App() {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [average, setAverage] = useState([]);
 
-  const onClickGood = () => {
-    setGood(good + 1);
-    setTotal(total + 1);
-    setAverage(average.concat(1));
+  const [votes, setVote] = useState({
+    good: 0, neutral: 0, bad:0
+  });
+
+  const handleGoodVote = () => {
+    setVote({...votes, good: votes.good + 1});
+    console.log(votes);
   };
 
-  const onClickNeutral = () => {
-    setNeutral(neutral + 1);
-    setTotal(total + 1);
-    setAverage(average.concat(0));
+  const handleNeutralVote = () => {
+    setVote({...votes, neutral: votes.neutral + 1})
+    console.log(votes);
   };
 
-  const onClickBad = () => {
-    setBad(bad + 1);
-    setTotal(total + 1);
-    setAverage(average.concat(-1));
-  };
-
-  const calcAverage = (array) => {
-    if (array.length === 0) {
-      return "Not Enough Votes.";
-    }
-    return array.reduce((a, b) => a + b, 0) / array.length;
-  };
-
-  const calcPercentage = (array) => {
-    if (array.length === 0) {
-      return 0;
-    }
-    const totalNoOfVotes = array.length;
-    const positives = array.filter((vote) => vote > 0);
-    return (positives.length * 100) / totalNoOfVotes;
+  const handleBadVote = () => {
+    setVote({...votes, bad: votes.bad + 1})
+    console.log(votes);
   };
 
   return (
@@ -52,18 +32,18 @@ function App() {
       <h1>Unicafe</h1>
       <h3>Give Feedback</h3>
       <div>
-        <Button handleClick={onClickGood} text="Good" />
-        <Button handleClick={onClickNeutral} text="Neutral" />
-        <Button handleClick={onClickBad} text="Bad" />
+        <Button handleClick={handleGoodVote} text="Good" />
+        <Button handleClick={handleNeutralVote} text="Neutral" />
+        <Button handleClick={handleBadVote} text="Bad" />
       </div>
       <h3>Statistics</h3>
       <div>
-        <p>Good: {good}</p>
+        {/* <p>Good: {good}</p>
         <p>Neutral: {neutral}</p>
-        <p>Bad: {bad}</p>
-        <p>Total: {total}</p>
+        <p>Bad: {bad}</p> */}
+        {/* <p>Total: {total}</p>
         <p>Average: {calcAverage(average)}</p>
-        <p>Percentage: {calcPercentage(average)} %</p>
+        <p>Percentage: {calcPercentage(average)} %</p> */}
       </div>
     </>
   );
