@@ -14,27 +14,21 @@ function App() {
   const [average, setAverage] = useState([]);
 
   const onClickGood = () => {
-    console.log(good);
     setGood(good + 1);
     setTotal(total + 1);
     setAverage(average.concat(1));
-    console.log(average);
   };
 
   const onClickNeutral = () => {
-    console.log(neutral);
     setNeutral(neutral + 1);
     setTotal(total + 1);
     setAverage(average.concat(0));
-    console.log(average);
   };
 
   const onClickBad = () => {
-    console.log(bad);
     setBad(bad + 1);
     setTotal(total + 1);
     setAverage(average.concat(-1));
-    console.log(average);
   };
 
   const calcAverage = (array) => {
