@@ -3,9 +3,11 @@ import "./App.css";
 
 const StatisticLine = ({ data, value }) => {
   return (
-    <p>
-      {data} {value}
-    </p>
+    <tr>
+      <td>
+        {data} {value}
+      </td>
+    </tr>
   );
 };
 
@@ -24,12 +26,16 @@ const Statistics = ({ votes }) => {
 
   return (
     <>
-      <StatisticLine data="Good:" value={votes.good} />
-      <StatisticLine data="Neutral:" value={votes.neutral} />
-      <StatisticLine data="Bad:" value={votes.bad} />
-      <StatisticLine data="Total Votes:" value={total} />
-      <StatisticLine data="Average:" value={average} />
-      <StatisticLine data="Positives:" value={positive} />
+      <table>
+        <tbody>
+          <StatisticLine data="Good:" value={votes.good} />
+          <StatisticLine data="Neutral:" value={votes.neutral} />
+          <StatisticLine data="Bad:" value={votes.bad} />
+          <StatisticLine data="Total Votes:" value={total} />
+          <StatisticLine data="Average:" value={average} />
+          <StatisticLine data="Positives:" value={positive} />
+        </tbody>
+      </table>
     </>
   );
 };
