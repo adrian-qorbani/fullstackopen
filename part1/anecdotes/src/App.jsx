@@ -11,6 +11,23 @@ const AnecdoteDisplay = ({ index, votes }) => {
   );
 };
 
+// Highest Votes Components
+const HighestVoted = ({ anecdotes, votes }) => {
+  const HighestVoteInVotes = Math.max(...votes);
+  const HighestVoteIdx = votes.indexOf(HighestVoteInVotes);
+  const HighestVotedAnec = anecdotes[HighestVoteIdx];
+
+  if (HighestVoteInVotes === 0) {
+    return <p>Not enough votes.</p>;
+  }
+
+  return (
+    <p>
+      {HighestVotedAnec} votes: {HighestVoteInVotes}
+    </p>
+  );
+};
+
 // Button Component
 const Button = ({ text, clickHandler }) => (
   <button onClick={clickHandler}>{text}</button>
@@ -18,6 +35,9 @@ const Button = ({ text, clickHandler }) => (
 
 // Page Title Component
 const PageTitle = ({ text }) => <h1>{text}</h1>;
+
+// Page Title Component
+const PageHeader = ({ text }) => <h3>{text}</h3>;
 
 // Page Description
 const PageDesc = ({ text }) => (
@@ -51,13 +71,14 @@ function App() {
     setSelected(Math.floor(Math.random() * anecdotes.length));
 
   // Vote Click Handler
+  // IMPORTANT: The correct way of updating state stored in a 
+  // complex data structure like object & arrays is to make a
+  // copy of that state. NEVER directly change the data structure.
+  
   let voteClickHandler = () => {
-
-    console.log(votes);
     const newVotes = [...votes];
     newVotes[selected] += 1;
     setVote(newVotes);
-
   };
 
   // Renderer
@@ -69,6 +90,8 @@ function App() {
         <Button text="Next Anecdote" clickHandler={randomChooserClick} />
         <Button text="Vote" clickHandler={voteClickHandler} />
         <AnecdoteDisplay index={anecdotes[selected]} votes={votes[selected]} />
+        <PageHeader text="Anecdotes with highest votes:" />
+        <HighestVoted anecdotes={anecdotes} votes={votes} />
       </div>
     </>
   );
