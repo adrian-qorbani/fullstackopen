@@ -1,5 +1,10 @@
 import { useState } from "react";
 import "./App.css";
+import Title from "./components/Title";
+import Search from "./components/Search";
+import Header from "./components/Header";
+import ContactForm from "./components/ContactForm";
+import ContactList from "./components/ContactList";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -15,7 +20,6 @@ const App = () => {
   // adding new name to form
   const addNewName = (e) => {
     e.preventDefault();
-    console.log(newName, newNumber);
 
     // check for duplicate name
     if (persons.find((x) => x.name == newName)) {
@@ -42,46 +46,26 @@ const App = () => {
   };
   const handleSearchInputChange = (e) => {
     setShowPerson(e.target.value);
-    console.log(e.target.value);
   };
-
-  // filter search
-  // const personsToShow = showPerson ? persons : persons.filter(persons => persons.name === showPerson)
-  // const personsToShow = persons.filter(persons => persons.name === showPerson)
 
   // renderer
   return (
     <div>
-      <h1>Phonebook</h1>
-      <div>
-        Search: <input value={showPerson} onChange={handleSearchInputChange} />
-      </div>
-      <h2>Add new contact:</h2>
-      <form onSubmit={addNewName}>
-        <div>
-          Name: <input value={newName} onChange={handleNameInputChange} />
-        </div>
-        <div>
-          Number: <input value={newNumber} onChange={handleNumberInputChange} />
-        </div>
-        <div>
-          <button type="submit">ADD</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <div>
-        {persons
-          .filter((person) => {
-            return showPerson.toLowerCase() === ""
-              ? person
-              : person.name.toLowerCase().includes(showPerson);
-          })
-          .map((person) => (
-            <p key={person.name}>
-              {person.name} * {person.number}
-            </p>
-          ))}
-      </div>
+      <Title text="Phonebook" />
+      <Search
+        filteredPerson={showPerson}
+        evHandler={handleSearchInputChange}
+      />
+      <Header text="Add new contact: " />
+      <ContactForm
+        addNewName={addNewName}
+        newName={newName}
+        newNumber={newNumber}
+        handleNameInputChange={handleNameInputChange}
+        handleNumberInputChange={handleNumberInputChange}
+      />
+      <Header text="Numbers" />
+      <ContactList persons={persons} showPerson={showPerson}/>
     </div>
   );
 };
