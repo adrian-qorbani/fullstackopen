@@ -1,10 +1,7 @@
 const Total = ({ course }) => {
-  // total variable defined
-  let total = 0;
-
-  // map through courses and adding number of exercise to total
-  course.parts.map((eachCourse) => (total += eachCourse.exercises));
-
+  
+  // Updated for exercise 2.3 to use reduce to sum number of exercises 
+  let total = course.parts.reduce((partialSum, a) => partialSum += a.exercises, 0);
   return <h4>Total of {total} exercises.</h4>;
 };
 
