@@ -8,8 +8,15 @@ const App = () => {
   // adding new name to form
   const addNewName = (e) => {
     e.preventDefault();
-    console.log("on change event listner works");
+    console.log(newName);
 
+    // check for duplicate name
+    if (persons.find(x => x.name == newName)) {
+      alert(`${newName} is already added to the phonebook.`);
+      return;
+    }
+    
+    // define a new contact
     const personObject = {
       name: newName
     };
