@@ -6,15 +6,16 @@ import Search from "./components/Search";
 import Header from "./components/Header";
 import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("Marty Byrd");
   const [newNumber, setNewNumber] = useState("000-000-000");
   const [showPerson, setShowPerson] = useState("");
-  const [update, forceUpdate] = useReducer(x => x + 1, 0);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [update, forceUpdate] = useReducer((x) => x + 1, 0);
 
- 
   useEffect(() => {
     personService.getAll().then((initialPerson) => {
       setPersons(initialPerson);
@@ -22,14 +23,16 @@ const App = () => {
   }, [update]);
 
   // adding new name to form
-
   const addNewName = (e) => {
     const filterPerson = persons.filter((person) => person.name == newName);
     const updatedPerson = { ...filterPerson[0], number: newNumber };
 
     e.preventDefault();
     if (persons.find((x) => x.name == newName && x.number == newNumber)) {
-      alert(`${newName} is already added to the phonebook.`);
+      setErrorMessage(`${newName} is already added to the phonebook.`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
       return;
     } else if (persons.find((x) => x.name == newName)) {
       alert(
@@ -40,6 +43,8 @@ const App = () => {
         .then((returnedPerson) => {
           console.log(`${returnedPerson.name} updated.`);
         });
+        // force update to refresh the component
+      forceUpdate();
       return;
     }
 
@@ -51,6 +56,10 @@ const App = () => {
 
     personService.create(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
+      setErrorMessage(`${newName}' added successfully.`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
       setNewName("");
       setNewNumber("");
     });
@@ -61,8 +70,12 @@ const App = () => {
     const filteredPerson = persons.filter((person) => person.id === id);
     if (window.confirm(`Do you want to delete ${filteredPerson[0].name}?`)) {
       personService.personDelete(filteredPerson[0].id);
-      console.log(`${filteredPerson[0].name} is removed.`);
-      forceUpdate()
+      // console.log(`${filteredPerson[0].name} is removed.`);
+      setErrorMessage(`${filteredPerson[0].name} is removed.`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+      forceUpdate();
     }
     return;
   };
@@ -91,6 +104,7 @@ const App = () => {
         handleNameInputChange={handleNameInputChange}
         handleNumberInputChange={handleNumberInputChange}
       />
+      <Notification message={errorMessage} />
       <Header text="Numbers" />
       <ContactList
         persons={persons}
