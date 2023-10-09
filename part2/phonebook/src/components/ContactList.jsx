@@ -10,7 +10,6 @@ const ContactList = ({ persons, showPerson, onClickDelete }) => {
         .map((person) => (
             <div key={person.id}>
               {person.name} * {person.number}
-              {/* <button onClick={() => console.log(person.id)}>delete</button> */}
               <button onClick={() => onClickDelete(person.id)}>delete</button>
             </div>
         ))}

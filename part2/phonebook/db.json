@@ -1,14 +1,9 @@
 {
   "persons": [
     {
-      "name": "John",
-      "number": "000-412-999",
-      "id": 1
-    },
-    {
       "name": "Marty Byrd",
-      "number": "000-500-000",
-      "id": 4
+      "number": "5646446565",
+      "id": 1
     }
   ]
 }

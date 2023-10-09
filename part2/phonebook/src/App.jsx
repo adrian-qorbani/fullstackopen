@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import "./App.css";
 import personService from "./services/person";
 import Title from "./components/Title";
@@ -12,19 +12,20 @@ const App = () => {
   const [newName, setNewName] = useState("Marty Byrd");
   const [newNumber, setNewNumber] = useState("000-000-000");
   const [showPerson, setShowPerson] = useState("");
+  const [update, forceUpdate] = useReducer(x => x + 1, 0);
 
+ 
   useEffect(() => {
     personService.getAll().then((initialPerson) => {
       setPersons(initialPerson);
     });
-  }, []);
+  }, [update]);
 
   // adding new name to form
+
   const addNewName = (e) => {
-    // Filter contacts to match duplicate names with different number
-    const dumPerson = persons.filter((person) => person.name == newName);
-    // const updatedPerson = {name:"John",number:"000-412-999", id: 1}
-    const updatedPerson = { ...dumPerson[0], number: newNumber };
+    const filterPerson = persons.filter((person) => person.name == newName);
+    const updatedPerson = { ...filterPerson[0], number: newNumber };
 
     e.preventDefault();
     if (persons.find((x) => x.name == newName && x.number == newNumber)) {
@@ -34,7 +35,6 @@ const App = () => {
       alert(
         `${newName} is already added to the phonebook with a different number.`
       );
-      // ????????????????
       personService
         .update(updatedPerson.id, updatedPerson)
         .then((returnedPerson) => {
@@ -62,7 +62,9 @@ const App = () => {
     if (window.confirm(`Do you want to delete ${filteredPerson[0].name}?`)) {
       personService.personDelete(filteredPerson[0].id);
       console.log(`${filteredPerson[0].name} is removed.`);
+      forceUpdate()
     }
+    return;
   };
 
   // on change handlers
