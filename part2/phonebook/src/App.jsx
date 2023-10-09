@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import "./App.css";
 import personService from "./services/person";
 import Title from "./components/Title";
@@ -16,15 +15,12 @@ const App = () => {
   const [showPerson, setShowPerson] = useState("");
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPerson => {
+        setPersons(initialPerson)
       })
   }, [])
-  console.log('render', persons.length, 'notes')
 
   // adding new name to form
   const addNewName = (e) => {
@@ -45,13 +41,13 @@ const App = () => {
     // setNewName("");
     // setNewNumber("");
     // used axios to save contact to backend
-    axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => {
-        console.log(response);
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
+
+      personService
+      .create(personObject)
+      .then(returnedNote => {
+        setPersons(persons.concat(returnedNote))
+        setNewName('')
+        setNewNumber('')
       })
   };
 
