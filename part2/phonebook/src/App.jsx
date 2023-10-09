@@ -36,13 +36,21 @@ const App = () => {
       return;
     } else if (persons.find((x) => x.name == newName)) {
       alert(
-        `${newName} is already added to the phonebook with a different number.`
+        `${newName} is already added to the phonebook with a different number. Updating ...`
       );
       personService
         .update(updatedPerson.id, updatedPerson)
         .then((returnedPerson) => {
-          console.log(`${returnedPerson.name} updated.`);
-        });
+          console.log(`${returnedPerson.name} updated.`)
+        })
+        .catch(() => {
+          setErrorMessage(`${newName} is already removed from the phonebook.`);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+        })
+        ;
+        
         // force update to refresh the component
       forceUpdate();
       return;
