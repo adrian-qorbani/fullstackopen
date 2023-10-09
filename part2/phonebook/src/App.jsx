@@ -8,25 +8,21 @@ import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
 
 const App = () => {
-
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("Marty Byrd");
   const [newNumber, setNewNumber] = useState("000-000-000");
   const [showPerson, setShowPerson] = useState("");
+  const [filtered, setFiltered] = useState("");
 
   useEffect(() => {
-    personService
-      .getAll()
-      .then(initialPerson => {
-        setPersons(initialPerson)
-      })
-  }, [])
+    personService.getAll().then((initialPerson) => {
+      setPersons(initialPerson);
+    });
+  }, []);
 
   // adding new name to form
   const addNewName = (e) => {
     e.preventDefault();
-
-    // check for duplicate name
     if (persons.find((x) => x.name == newName)) {
       alert(`${newName} is already added to the phonebook.`);
       return;
@@ -37,18 +33,22 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    // setPersons(persons.concat(personObject));
-    // setNewName("");
-    // setNewNumber("");
-    // used axios to save contact to backend
 
-      personService
-      .create(personObject)
-      .then(returnedNote => {
-        setPersons(persons.concat(returnedNote))
-        setNewName('')
-        setNewNumber('')
-      })
+    personService.create(personObject).then((returnedNote) => {
+      setPersons(persons.concat(returnedNote));
+      setNewName("");
+      setNewNumber("");
+    });
+  };
+
+  // removing a contact from contact list
+  const handlePersonDelete = (id) => {
+    // personService.personDelete()
+    console.log(id);
+    const filteredPerson = persons.filter(person => person.id === id);
+    console.log(filteredPerson);
+    personService.personDelete(filteredPerson[0].id)
+    console.log(`${filteredPerson[0].name} is removed.`);
   };
 
   // on change handlers
@@ -66,10 +66,7 @@ const App = () => {
   return (
     <div>
       <Title text="Phonebook" />
-      <Search
-        filteredPerson={showPerson}
-        evHandler={handleSearchInputChange}
-      />
+      <Search filteredPerson={showPerson} evHandler={handleSearchInputChange} />
       <Header text="Add new contact: " />
       <ContactForm
         addNewName={addNewName}
@@ -79,7 +76,11 @@ const App = () => {
         handleNumberInputChange={handleNumberInputChange}
       />
       <Header text="Numbers" />
-      <ContactList persons={persons} showPerson={showPerson}/>
+      <ContactList
+        persons={persons}
+        showPerson={showPerson}
+        onClickDelete={handlePersonDelete}
+      />
     </div>
   );
 };

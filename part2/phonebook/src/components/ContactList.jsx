@@ -1,4 +1,4 @@
-const ContactList = ({persons, showPerson}) => {
+const ContactList = ({ persons, showPerson, onClickDelete }) => {
   return (
     <div>
       {persons
@@ -8,12 +8,14 @@ const ContactList = ({persons, showPerson}) => {
             : person.name.toLowerCase().includes(showPerson);
         })
         .map((person) => (
-          <p key={person.name}>
-            {person.name} * {person.number}
-          </p>
+            <div key={person.id}>
+              {person.name} * {person.number}
+              {/* <button onClick={() => console.log(person.id)}>delete</button> */}
+              <button onClick={() => onClickDelete(person.id)}>delete</button>
+            </div>
         ))}
     </div>
   );
 };
 
-export default ContactList
+export default ContactList;
