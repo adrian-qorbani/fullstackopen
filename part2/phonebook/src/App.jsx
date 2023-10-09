@@ -12,7 +12,6 @@ const App = () => {
   const [newName, setNewName] = useState("Marty Byrd");
   const [newNumber, setNewNumber] = useState("000-000-000");
   const [showPerson, setShowPerson] = useState("");
-  const [filtered, setFiltered] = useState("");
 
   useEffect(() => {
     personService.getAll().then((initialPerson) => {
@@ -22,9 +21,25 @@ const App = () => {
 
   // adding new name to form
   const addNewName = (e) => {
+    // Filter contacts to match duplicate names with different number
+    const dumPerson = persons.filter((person) => person.name == newName);
+    // const updatedPerson = {name:"John",number:"000-412-999", id: 1}
+    const updatedPerson = { ...dumPerson[0], number: newNumber };
+
     e.preventDefault();
-    if (persons.find((x) => x.name == newName)) {
+    if (persons.find((x) => x.name == newName && x.number == newNumber)) {
       alert(`${newName} is already added to the phonebook.`);
+      return;
+    } else if (persons.find((x) => x.name == newName)) {
+      alert(
+        `${newName} is already added to the phonebook with a different number.`
+      );
+      // ????????????????
+      personService
+        .update(updatedPerson.id, updatedPerson)
+        .then((returnedPerson) => {
+          console.log(`${returnedPerson.name} updated.`);
+        });
       return;
     }
 
@@ -34,8 +49,8 @@ const App = () => {
       number: newNumber,
     };
 
-    personService.create(personObject).then((returnedNote) => {
-      setPersons(persons.concat(returnedNote));
+    personService.create(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
       setNewName("");
       setNewNumber("");
     });
@@ -43,12 +58,11 @@ const App = () => {
 
   // removing a contact from contact list
   const handlePersonDelete = (id) => {
-    // personService.personDelete()
-    console.log(id);
-    const filteredPerson = persons.filter(person => person.id === id);
-    console.log(filteredPerson);
-    personService.personDelete(filteredPerson[0].id)
-    console.log(`${filteredPerson[0].name} is removed.`);
+    const filteredPerson = persons.filter((person) => person.id === id);
+    if (window.confirm(`Do you want to delete ${filteredPerson[0].name}?`)) {
+      personService.personDelete(filteredPerson[0].id);
+      console.log(`${filteredPerson[0].name} is removed.`);
+    }
   };
 
   // on change handlers
