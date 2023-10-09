@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+import personService from "./services/person";
 import Title from "./components/Title";
 import Search from "./components/Search";
 import Header from "./components/Header";
