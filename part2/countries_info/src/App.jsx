@@ -7,12 +7,7 @@ import countryService from "./services/country";
 
 function App() {
   const [APIData, setAPIData] = useState([]);
-
-  // showTable 0 [no data], 1 [countries list] , 2 [country details]
-  // const [showTable, setShowTable] = useState(1);
-
   const [filteredResults, setFilteredResults] = useState([]);
-
   const [searchCountry, setSearchCountry] = useState("");
 
   useEffect(() => {
@@ -28,11 +23,10 @@ function App() {
         return Object.values(country.name.common)
           .join("")
           .toLowerCase()
-          .includes(searchCountry.toLowerCase());
+          .includes(e.target.value.toLowerCase());
       });
       setFilteredResults(filteredData);
-      
-    } 
+    }
   };
 
   return (
