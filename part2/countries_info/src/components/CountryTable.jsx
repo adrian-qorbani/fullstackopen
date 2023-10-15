@@ -3,9 +3,7 @@ const CountryTable = ({ apiData }) => {
   if (apiData.length == 0) {
     return (
       <div className="card">
-        <p>
-          No <code>data</code> found.
-        </p>
+
       </div>
     );
   } else if (apiData.length > 9) {
@@ -51,9 +49,9 @@ const CountryTable = ({ apiData }) => {
           <div>
             <hgroup>
               <h5>Weather</h5>
-              <h5>in Helsinki</h5>
+              <h5>in {apiData[0].capital[0]}</h5>
             </hgroup>
-            Temp: 32 C
+            32 °C
           </div>
         </div>
       </article>
