@@ -11,8 +11,9 @@ function App() {
   // showTable 0 [no data], 1 [countries list] , 2 [country details]
   // const [showTable, setShowTable] = useState(1);
 
-  const [searchCountry, setSearchCountry] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
+
+  const [searchCountry, setSearchCountry] = useState("");
 
   useEffect(() => {
     countryService.getCountry().then((response) => {
@@ -30,9 +31,8 @@ function App() {
           .includes(searchCountry.toLowerCase());
       });
       setFilteredResults(filteredData);
-    } else {
-      setFilteredResults(APIData);
-    }
+      
+    } 
   };
 
   return (
