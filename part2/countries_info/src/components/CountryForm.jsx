@@ -1,21 +1,19 @@
-const CountryForm = ({ addCount, count }) => {
+const CountryForm = ({filteredCountries, evHandler}) => {
   return (
-    <form onSubmit={addCount}>
-      {/* <label htmlFor="search">Country Name</label> */}
+    <div>
       <input
         // type="text"
-        // id="country"
         name="search"
         type="search"
         id="search"
         placeholder="Country ..."
-        required
+        value={filteredCountries} 
+        onChange={evHandler}
       />
       <small>
         Type down complete name of a country to see more details about it.
       </small>
-      <button type="submit">Search</button>
-    </form>
+    </div>
   );
 };
 
