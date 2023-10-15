@@ -1,8 +1,9 @@
 const Search = ({filteredPerson, evHandler}) => {
   return (
-    <div>
-      Search: <input value={filteredPerson} onChange={evHandler} />
+    <div id="wrapper">
+      Search<br /> <input className="input-field" value={filteredPerson} onChange={evHandler} />
     </div>
+    
   );
 };
 

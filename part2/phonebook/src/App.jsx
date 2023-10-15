@@ -10,8 +10,8 @@ import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("Marty Byrd");
-  const [newNumber, setNewNumber] = useState("000-000-000");
+  const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
   const [showPerson, setShowPerson] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [update, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -35,23 +35,23 @@ const App = () => {
       }, 5000);
       return;
     } else if (persons.find((x) => x.name == newName)) {
-      alert(
-        `${newName} is already added to the phonebook with a different number. Updating ...`
-      );
+      setErrorMessage(`${newName} is already added to the phonebook with a different number. Updating ...`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
       personService
         .update(updatedPerson.id, updatedPerson)
         .then((returnedPerson) => {
-          console.log(`${returnedPerson.name} updated.`)
+          console.log(`${returnedPerson.name} updated.`);
         })
         .catch(() => {
           setErrorMessage(`${newName} is already removed from the phonebook.`);
           setTimeout(() => {
             setErrorMessage(null);
           }, 5000);
-        })
-        ;
-        
-        // force update to refresh the component
+        });
+
+      // force update to refresh the component
       forceUpdate();
       return;
     }
@@ -64,12 +64,17 @@ const App = () => {
 
     personService.create(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
-      setErrorMessage(`${newName}' added successfully.`);
+      setErrorMessage(`${newName} added successfully.`);
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
       setNewName("");
       setNewNumber("");
+    }).catch((error) => {
+      setErrorMessage(`${error.response.data.error}`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000)
     });
   };
 
@@ -102,9 +107,12 @@ const App = () => {
   // renderer
   return (
     <div>
-      <Title text="Phonebook" />
+      <div>
+        <Title text="Phonebook" />{" "}
+      </div>
       <Search filteredPerson={showPerson} evHandler={handleSearchInputChange} />
-      <Header text="Add new contact: " />
+      <br />
+      <Notification message={errorMessage} />
       <ContactForm
         addNewName={addNewName}
         newName={newName}
@@ -112,8 +120,6 @@ const App = () => {
         handleNameInputChange={handleNameInputChange}
         handleNumberInputChange={handleNumberInputChange}
       />
-      <Notification message={errorMessage} />
-      <Header text="Numbers" />
       <ContactList
         persons={persons}
         showPerson={showPerson}

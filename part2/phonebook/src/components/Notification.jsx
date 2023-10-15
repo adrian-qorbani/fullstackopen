@@ -4,8 +4,8 @@ const Notification = ({message}) => {
   }
 
   return (
-    <div className="error">
-      {message}
+    <div id="wrapper" class="error">
+      ♦ {message}
     </div>
   )
 }

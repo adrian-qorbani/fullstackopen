@@ -1,16 +1,40 @@
-const ContactForm = ({addNewName, newName, newNumber, handleNameInputChange, handleNumberInputChange}) => {
+const ContactForm = ({
+  addNewName,
+  newName,
+  newNumber,
+  handleNameInputChange,
+  handleNumberInputChange,
+}) => {
   return (
-    <form onSubmit={addNewName}>
-      <div>
-        Name: <input value={newName} onChange={handleNameInputChange} />
+    <div id="wrapper">
+      <div id="contactForm">
+        <form id="contactForm" onSubmit={addNewName}>
+          <div>
+            Name
+            <br />{" "}
+            <input
+              className="input-field"
+              value={newName}
+              onChange={handleNameInputChange}
+            />
+          </div>
+          <div>
+            Number
+            <br />{" "}
+            <input
+              className="input-field"
+              value={newNumber}
+              onChange={handleNumberInputChange}
+            />
+          </div>
+          <div>
+            <button className="submit-btn" type="submit">
+              ADD
+            </button>
+          </div>
+        </form>
       </div>
-      <div>
-        Number: <input value={newNumber} onChange={handleNumberInputChange} />
-      </div>
-      <div>
-        <button type="submit">ADD</button>
-      </div>
-    </form>
+    </div>
   );
 };
 
