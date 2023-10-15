@@ -1,20 +1,20 @@
 const CountryForm = ({ addCount, count }) => {
   return (
     <form onSubmit={addCount}>
-      <label htmlFor="country">Country Name</label>
+      {/* <label htmlFor="search">Country Name</label> */}
       <input
-        type="text"
-        id="country"
-        name="country"
-        placeholder="Country"
+        // type="text"
+        // id="country"
+        name="search"
+        type="search"
+        id="search"
+        placeholder="Country ..."
         required
       />
       <small>
         Type down complete name of a country to see more details about it.
       </small>
-      <button type="submit">
-        count is {count}
-      </button>
+      <button type="submit">Search</button>
     </form>
   );
 };
