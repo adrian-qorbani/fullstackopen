@@ -16,23 +16,23 @@ const CountryTable = ({ tableVisibility }) => {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Country Name</th>
-              <th scope="col">Details</th>
+              {/* <th scope="col">Details</th> */}
             </tr>
           </thead>
           <tbody>
             <tr>
               <th scope="row">1</th>
               <td>Albania</td>
-              <td>
+              {/* <td>
                 <button>Show</button>
-              </td>
+              </td> */}
             </tr>
             <tr>
               <th scope="row">2</th>
               <td>USA</td>
-              <td>
+              {/* <td>
                 <button>Show</button>
-              </td>
+              </td> */}
             </tr>
           </tbody>
         </table>
