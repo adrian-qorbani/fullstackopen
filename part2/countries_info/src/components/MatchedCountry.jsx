@@ -9,7 +9,7 @@ const MatchedCountry = ({apiData}) => {
     <tbody>
       {apiData.map((country) => {
         return (
-          <tr>
+          <tr key={country.name.common}>
             <td>{country.name.common}</td>
           </tr>
         );
