@@ -1,7 +1,7 @@
 import DetailedCountry from "./DetailedCountry";
 import MatchedCountry from "./MatchedCountry";
 
-const CountryTable = ({ apiData }) => {
+const CountryTable = ({ apiData, setFilteredResults }) => {
   if (apiData.length == 0) {
     return (
       <></>
@@ -20,7 +20,7 @@ const CountryTable = ({ apiData }) => {
     );
   } else {
     return (
-      <MatchedCountry apiData={apiData}/>
+      <MatchedCountry apiData={apiData} setFilteredResults={setFilteredResults}/>
     );
   }
 };

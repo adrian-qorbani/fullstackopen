@@ -29,6 +29,11 @@ function App() {
     }
   };
 
+  // const onClickShow = (e) => {
+  //   console.log(e)
+  //   setSearchCountry([e])
+  // }
+
   return (
     <>
       <Header />
@@ -36,7 +41,7 @@ function App() {
         filteredCountries={searchCountry}
         evHandler={handleSearchInputChange}
       />
-      <CountryTable apiData={filteredResults} />
+      <CountryTable apiData={filteredResults} setFilteredResults={setFilteredResults} />
       <Footer />
     </>
   );
