@@ -14,7 +14,8 @@ function App() {
     countryService.getCountry().then((response) => {
       setAPIData(response);
     });
-  }, []);
+  }
+  , []);
 
   const handleSearchInputChange = (e) => {
     setSearchCountry(e.target.value);
@@ -28,11 +29,6 @@ function App() {
       setFilteredResults(filteredData);
     }
   };
-
-  // const onClickShow = (e) => {
-  //   console.log(e)
-  //   setSearchCountry([e])
-  // }
 
   return (
     <>

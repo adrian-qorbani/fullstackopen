@@ -1,4 +1,20 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 const DetailedCountry = ({apiData}) => {
+  const [capitalWeather, setCapitalWeather] = useState([]) 
+
+  useEffect(() => {
+
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${apiData[0].capital[0]}&appid=${apiKey}`)
+      .then(response => {
+        const apiResponse = response.data;
+        setCapitalWeather([apiResponse])
+      }).catch(error => {
+        console.log(error);
+    })
+  })
+
   return (
     <article>
       <div className="grid">
@@ -33,7 +49,7 @@ const DetailedCountry = ({apiData}) => {
             <h5>Weather</h5>
             <h5>in {apiData[0].capital[0]}</h5>
           </hgroup>
-          32 °C
+          {capitalWeather[0].main.temp} °C
         </div>
       </div>
     </article>
