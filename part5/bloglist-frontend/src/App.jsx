@@ -11,6 +11,10 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
+
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
@@ -23,7 +27,7 @@ const App = () => {
       const user = await loginService.login({ username, password });
       console.log(`${user.name} successfully logged in.`);
       // console.log(user)
-      blogService.setToken(user.token)
+      blogService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
@@ -59,23 +63,41 @@ const App = () => {
     </form>
   );
 
-  const addBlog = () => {
-    
-  }
+  const addBlog = async (event) => {
+    event.preventDefault();
+
+    try {
+      const blog = await blogService.create({ title, author, url });
+      console.log(`${blog} is created.`);
+      setAuthor("");
+      setTitle("");
+      setUrl("");
+    } catch (exception) {
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+    }
+  };
 
   const blogForm = () => (
     <form onSubmit={addBlog}>
       <label>
         title:
-        <input value={newTitle} onChange={handleBlogChange} />
+        <input
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+        />
       </label>
       <label>
         author:
-        <input value={newAuthor} onChange={handleBlogChange} />
+        <input
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
       </label>
       <label>
         url:
-        <input value={newUrl} onChange={handleBlogChange} />
+        <input value={url} onChange={({ target }) => setUrl(target.value)} />
       </label>
       <button type="submit">Save</button>
     </form>
@@ -100,6 +122,7 @@ const App = () => {
       {user && (
         <div>
           <p>{user.name} logged in.</p>
+          {blogForm()}
           {blogList()}
         </div>
       )}{" "}
