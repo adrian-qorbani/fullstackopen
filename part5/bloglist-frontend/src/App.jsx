@@ -21,6 +21,15 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogListAppUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
+  }, []);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     // console.log("logging in with", username, password);
@@ -29,6 +38,11 @@ const App = () => {
       const user = await loginService.login({ username, password });
       console.log(`${user.name} successfully logged in.`);
       // console.log(user)
+      window.localStorage.setItem(
+        "loggedBlogListAppUser",
+        JSON.stringify(user)
+      );
+
       blogService.setToken(user.token);
       setUser(user);
       setUsername("");
@@ -73,7 +87,7 @@ const App = () => {
       setAuthor("");
       setTitle("");
       setUrl("");
-      setBlogs(blogs.concat(blog))
+      setBlogs(blogs.concat(blog));
     } catch (exception) {
       setTimeout(() => {
         setErrorMessage("");
@@ -83,27 +97,50 @@ const App = () => {
 
   const blogForm = () => (
     <form onSubmit={addBlog}>
-      <label>
-        title:
-        <input
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </label>
-      <label>
-        author:
-        <input
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </label>
-      <label>
-        url:
-        <input value={url} onChange={({ target }) => setUrl(target.value)} />
-      </label>
+      <div>
+        <label>
+          title:
+          <input
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          author:
+          <input
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          url:
+          <input value={url} onChange={({ target }) => setUrl(target.value)} />
+        </label>
+      </div>
       <button type="submit">Save</button>
     </form>
   );
+
+  const userCp = () => {
+    return (
+      <div>
+        <p>{user.name} logged in.</p>
+        <button
+          onClick={() => {
+            window.localStorage.clear();
+            window.location.reload(true);
+
+          }}
+        >
+          Log Out
+        </button>
+      </div>
+    );
+  };
 
   const blogList = () => {
     return (
@@ -123,7 +160,8 @@ const App = () => {
       <Notification message={errorMessage} />
       {user && (
         <div>
-          <p>{user.name} logged in.</p>
+          {/* <p>{user.name} logged in.</p>  */}
+          {userCp()}
           {blogForm()}
           {blogList()}
         </div>
