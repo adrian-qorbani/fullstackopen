@@ -32,12 +32,10 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    // console.log("logging in with", username, password);
 
     try {
       const user = await loginService.login({ username, password });
       console.log(`${user.name} successfully logged in.`);
-      // console.log(user)
       window.localStorage.setItem(
         "loggedBlogListAppUser",
         JSON.stringify(user)
@@ -88,6 +86,10 @@ const App = () => {
       setTitle("");
       setUrl("");
       setBlogs(blogs.concat(blog));
+      setErrorMessage("new blog added.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
     } catch (exception) {
       setTimeout(() => {
         setErrorMessage("");
@@ -133,7 +135,6 @@ const App = () => {
           onClick={() => {
             window.localStorage.clear();
             window.location.reload(true);
-
           }}
         >
           Log Out
@@ -160,7 +161,6 @@ const App = () => {
       <Notification message={errorMessage} />
       {user && (
         <div>
-          {/* <p>{user.name} logged in.</p>  */}
           {userCp()}
           {blogForm()}
           {blogList()}
