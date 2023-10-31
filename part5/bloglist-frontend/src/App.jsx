@@ -82,8 +82,9 @@ const App = () => {
     try {
       blogFormRef.current.toggleVisibility();
       await blogService.create(blogObject).then((returnedBlog) => {
-        setBlogs(blogs.concat(returnedBlog));
         setErrorMessage("new blog added.");
+        setBlogs(blogs.concat(returnedBlog));
+        setBlogs(blogs)
         setTimeout(() => {
           setErrorMessage("");
         }, 5000);
@@ -100,12 +101,6 @@ const App = () => {
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
     });
   };
-
-  // const deleteBlog = async (id) => {
-  //   await blogService.delete(id).then((returnedBlog) => {
-  //     setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
-  //   });
-  // };
 
   const deleteBlog = async (targetBlog) => {
     try {
@@ -156,6 +151,7 @@ const App = () => {
                 blog={blog}
                 updateBlog={likeBlog}
                 deleteBlog={deleteBlog}
+                user={blog.user.username}
               />
             </div>
           ))}
@@ -172,7 +168,7 @@ const App = () => {
         <div>
           {userCp()}
           <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
-            <BlogForm createBlog={addBlog} />
+            <BlogForm createBlog={addBlog}/>
           </Togglable>
           {blogList()}
         </div>
