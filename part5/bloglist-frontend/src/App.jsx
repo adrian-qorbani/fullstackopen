@@ -6,6 +6,7 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/Login";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
+import "./style.css"
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -14,13 +15,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
-
   const [loginVisible, setLoginVisible] = useState(false);
-
-  // const [blogs, setBlogs] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -105,24 +100,30 @@ const App = () => {
     );
   };
 
-  const addBlog = async (event) => {
-    event.preventDefault();
+  // const addBlog = async (event) => {
+  //   event.preventDefault();
 
-    try {
-      const blog = await blogService.create({ title, author, url });
-      setAuthor("");
-      setTitle("");
-      setUrl("");
-      setBlogs(blogs.concat(blog));
-      setErrorMessage("new blog added.");
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 5000);
-    } catch (exception) {
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 5000);
-    }
+  //   try {
+  //     const blog = await blogService.create({ title, author, url });
+  //     setAuthor("");
+  //     setTitle("");
+  //     setUrl("");
+  //     setBlogs(blogs.concat(blog));
+  //     setErrorMessage("new blog added.");
+  //     setTimeout(() => {
+  //       setErrorMessage("");
+  //     }, 5000);
+  //   } catch (exception) {
+  //     setTimeout(() => {
+  //       setErrorMessage("");
+  //     }, 5000);
+  //   }
+  // };
+
+  const addBlog = (blogObject) => {
+    blogService.create(blogObject).then((returnedBlog) => {
+      setBlogs(blogs.concat(returnedBlog));
+    });
   };
 
   // const blogForm = () => (
@@ -190,17 +191,8 @@ const App = () => {
       {user && (
         <div>
           {userCp()}
-          {/* {blogForm()} */}
-          <Togglable buttonLabel="new note">
-            <BlogForm
-              onSubmit={addBlog}
-              titleValue={title}
-              authorValue={author}
-              urlValue={url}
-              handleTitleChange={({ target }) => setTitle(target.value)}
-              handleAuthorChange={({ target }) => setAuthor(target.value)}
-              handleUrlChange={({ target }) => setUrl(target.value)}
-            />
+          <Togglable buttonLabel="new blog">
+            <BlogForm createBlog={addBlog} />
           </Togglable>
           {blogList()}
         </div>
