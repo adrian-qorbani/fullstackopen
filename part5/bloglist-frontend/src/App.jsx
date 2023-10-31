@@ -6,7 +6,7 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/Login";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
-import "./style.css"
+import "./style.css";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -17,7 +17,7 @@ const App = () => {
 
   const [loginVisible, setLoginVisible] = useState(false);
 
-  const blogFormRef = useRef()
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -123,7 +123,7 @@ const App = () => {
   // };
 
   const addBlog = (blogObject) => {
-    blogFormRef.current.toggleVisibility() 
+    blogFormRef.current.toggleVisibility();
     blogService.create(blogObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog));
     });
@@ -180,7 +180,9 @@ const App = () => {
       <div>
         <h3>Blogs</h3>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <div class="blog">
+            <Blog key={blog.id} blog={blog} />
+          </div>
         ))}
       </div>
     );
@@ -194,7 +196,7 @@ const App = () => {
       {user && (
         <div>
           {userCp()}
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          <Togglable buttonLabel="Add Blog" ref={blogFormRef}>
             <BlogForm createBlog={addBlog} />
           </Togglable>
           {blogList()}
