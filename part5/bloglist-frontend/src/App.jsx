@@ -147,16 +147,18 @@ const App = () => {
     return (
       <div>
         <h3>Blogs</h3>
-        {blogs.map((blog) => (
-          <div key={blog.id} className="blog">
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateBlog={likeBlog}
-              deleteBlog={deleteBlog}
-            />
-          </div>
-        ))}
+        {blogs
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <div key={blog.id} className="blog">
+              <Blog
+                key={blog.id}
+                blog={blog}
+                updateBlog={likeBlog}
+                deleteBlog={deleteBlog}
+              />
+            </div>
+          ))}
       </div>
     );
   };
