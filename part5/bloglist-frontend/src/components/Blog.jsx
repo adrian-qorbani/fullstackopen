@@ -1,26 +1,31 @@
 import { useState } from "react";
 
-const Blog = ({ blog , updateBlog}) => {
+const Blog = ({ blog , updateBlog, deleteBlog}) => {
   const [visible, setVisible] = useState(false);
   const showWhenVisible = { display: visible ? "" : "none" };
   const [blogObject, setBlogObject] = useState(blog);
+  const [user, setUser] = useState(blogObject.user.username);
 
   const toggleVisibility = () => {
     console.log(`you clicked`);
     setVisible(!visible);
   };
-
+  
   const likePost = () => {
     console.log(`post liked.`);
     const likedPost = { ...blog, likes: blog.likes + 1 };
     console.log(likedPost.id, likedPost)
-
     updateBlog(likedPost.id, likedPost);
     setBlogObject(likedPost);
   };
 
   const removeBlog = () => {
     console.log(`post removed.`);
+
+    const targetBlog = { ...blog};
+    // console.log(deleteBlog)
+    deleteBlog(targetBlog)
+
   };
 
   const blogStyle = {
@@ -50,7 +55,7 @@ const Blog = ({ blog , updateBlog}) => {
             ❤ like
           </button>
         </p>
-        added by <span className="written">{blogObject.user.username}</span>{" "}
+        added by <span className="written">{user}</span>{" "}
         <button id="remove" onClick={removeBlog}>
           Remove
         </button>

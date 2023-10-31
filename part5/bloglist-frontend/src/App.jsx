@@ -101,10 +101,36 @@ const App = () => {
     });
   };
 
+  // const deleteBlog = async (id) => {
+  //   await blogService.delete(id).then((returnedBlog) => {
+  //     setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
+  //   });
+  // };
+
+  const deleteBlog = async (targetBlog) => {
+    try {
+      if (window.confirm(`Are you sure to delete ${targetBlog.title}?`)) {
+        blogService.blogDelete(targetBlog.id);
+        setErrorMessage(`'${targetBlog.title}' was successfully deleted.`);
+        setBlogs(blogs.filter((blog) => blog.id !== targetBlog.id));
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+      }
+    } catch (exception) {
+      setErrorMessage(`Unable to delete ${targetBlog.title}.`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
+  };
+
   const userCp = () => {
     return (
       <div>
-        <p>{user.name} logged in.</p>
+        <p>
+          <span className="cp">{user.name}</span> logged in.
+        </p>
         <button
           onClick={() => {
             window.localStorage.clear();
@@ -123,7 +149,12 @@ const App = () => {
         <h3>Blogs</h3>
         {blogs.map((blog) => (
           <div key={blog.id} className="blog">
-            <Blog key={blog.id} blog={blog} updateBlog={likeBlog} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              updateBlog={likeBlog}
+              deleteBlog={deleteBlog}
+            />
           </div>
         ))}
       </div>
@@ -132,7 +163,7 @@ const App = () => {
 
   return (
     <div>
-      <h2>Favorite Blog List</h2>
+      <h1>Favorite Blog List</h1>
       {!user && loginForm()}
       <Notification message={errorMessage} />
       {user && (
