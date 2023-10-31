@@ -1,8 +1,9 @@
 import { useState } from "react";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog , updateBlog}) => {
   const [visible, setVisible] = useState(false);
   const showWhenVisible = { display: visible ? "" : "none" };
+  const [blogObject, setBlogObject] = useState(blog);
 
   const toggleVisibility = () => {
     console.log(`you clicked`);
@@ -11,6 +12,11 @@ const Blog = ({ blog }) => {
 
   const likePost = () => {
     console.log(`post liked.`);
+    const likedPost = { ...blog, likes: blog.likes + 1 };
+    console.log(likedPost.id, likedPost)
+
+    updateBlog(likedPost.id, likedPost);
+    setBlogObject(likedPost);
   };
 
   const removeBlog = () => {
@@ -28,25 +34,23 @@ const Blog = ({ blog }) => {
   const btnLabel = visible ? "Hide" : "Show";
 
   return (
-    // <div>
-    //   {blog.title} <span className="written">written by</span> {blog.author}{" "}
-    //   <button onClick={toggleVisibility}>show</button>
-    // </div>
     <div style={blogStyle} className="blog">
       <div>
         <p>
           {blog.title} <span className="written">written by</span> {blog.author}{" "}
           <button onClick={toggleVisibility}>{btnLabel}</button>
         </p>
+        <p></p>
       </div>
       <div style={showWhenVisible}>
-        <p>{blog.url}</p>
+        <a href={blog.url}>{blog.url}</a>
         <p>
-          {/* {blogObject.likes}{" "}
+          {blogObject.likes}{" "}
           <button id="like-button" onClick={likePost}>
-            Like
-          </button> */}
+            ❤ like
+          </button>
         </p>
+        added by <span className="written">{blogObject.user.username}</span>{" "}
         <button id="remove" onClick={removeBlog}>
           Remove
         </button>

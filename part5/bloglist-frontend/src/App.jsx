@@ -55,30 +55,6 @@ const App = () => {
     }
   };
 
-  // const loginForm = () => (
-  //   <form onSubmit={handleLogin}>
-  //     <div>
-  //       Username:
-  //       <input
-  //         type="text"
-  //         value={username}
-  //         name="Username"
-  //         onChange={({ target }) => setUsername(target.value)}
-  //       />
-  //     </div>
-  //     <div>
-  //       Password:
-  //       <input
-  //         type="password"
-  //         value={password}
-  //         name="Password"
-  //         onChange={({ target }) => setPassword(target.value)}
-  //       />
-  //     </div>
-  //     <button type="submit">login</button>
-  //   </form>
-  // );
-
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? "none" : "" };
     const showWhenVisible = { display: loginVisible ? "" : "none" };
@@ -102,62 +78,28 @@ const App = () => {
     );
   };
 
-  // const addBlog = async (event) => {
-  //   event.preventDefault();
-
-  //   try {
-  //     const blog = await blogService.create({ title, author, url });
-  //     setAuthor("");
-  //     setTitle("");
-  //     setUrl("");
-  //     setBlogs(blogs.concat(blog));
-  //     setErrorMessage("new blog added.");
-  //     setTimeout(() => {
-  //       setErrorMessage("");
-  //     }, 5000);
-  //   } catch (exception) {
-  //     setTimeout(() => {
-  //       setErrorMessage("");
-  //     }, 5000);
-  //   }
-  // };
-
-  const addBlog = (blogObject) => {
-    blogFormRef.current.toggleVisibility();
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog));
-    });
+  const addBlog = async (blogObject) => {
+    try {
+      blogFormRef.current.toggleVisibility();
+      await blogService.create(blogObject).then((returnedBlog) => {
+        setBlogs(blogs.concat(returnedBlog));
+        setErrorMessage("new blog added.");
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 5000);
+      });
+    } catch (exception) {
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+    }
   };
 
-  // const blogForm = () => (
-  //   <form onSubmit={addBlog}>
-  //     <div>
-  //       <label>
-  //         title:
-  //         <input
-  //           value={title}
-  //           onChange={({ target }) => setTitle(target.value)}
-  //         />
-  //       </label>
-  //     </div>
-  //     <div>
-  //       <label>
-  //         author:
-  //         <input
-  //           value={author}
-  //           onChange={({ target }) => setAuthor(target.value)}
-  //         />
-  //       </label>
-  //     </div>
-  //     <div>
-  //       <label>
-  //         url:
-  //         <input value={url} onChange={({ target }) => setUrl(target.value)} />
-  //       </label>
-  //     </div>
-  //     <button type="submit">Save</button>
-  //   </form>
-  // );
+  const likeBlog = async (id, blogObject) => {
+    await blogService.update(id, blogObject).then((returnedBlog) => {
+      setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
+    });
+  };
 
   const userCp = () => {
     return (
@@ -180,8 +122,8 @@ const App = () => {
       <div>
         <h3>Blogs</h3>
         {blogs.map((blog) => (
-          <div class="blog">
-            <Blog key={blog.id} blog={blog} />
+          <div key={blog.id} className="blog">
+            <Blog key={blog.id} blog={blog} updateBlog={likeBlog} />
           </div>
         ))}
       </div>

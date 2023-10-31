@@ -1,39 +1,3 @@
-// const BlogForm = ({ onSubmit, handleTitleChange, handleAuthorChange, handleUrlChange, titleValue, authorValue, urlValue }) => {
-//   return (
-//     <div>
-//       <form onSubmit={onSubmit}>
-//         <div>
-//           <label>
-//             title:
-//             <input
-//               value={titleValue}
-//               onChange={handleTitleChange}
-//             />
-//           </label>
-//         </div>
-//         <div>
-//           <label>
-//             author:
-//             <input
-//               value={authorValue}
-//               onChange={handleAuthorChange}
-//             />
-//           </label>
-//         </div>
-//         <div>
-//           <label>
-//             url:
-//             <input
-//               value={urlValue}
-//               onChange={handleUrlChange}
-//             />
-//           </label>
-//         </div>
-//         <button type="submit">Add</button>
-//       </form>
-//     </div>
-//   );
-// };
 
 import { useState } from "react";
 
