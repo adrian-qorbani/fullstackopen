@@ -1,5 +1,6 @@
 import axios from "axios";
 const baseUrl = "http://localhost:3003/api/blogs";
+// const baseUrl = '/api/blogs'
 
 let token = null;
 
@@ -8,7 +9,11 @@ const setToken = (newToken) => {
 };
 
 const getAll = () => {
-  const request = axios.get(baseUrl);
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+  };
+
+  const request = axios.get(baseUrl, config);
   return request.then((response) => response.data);
 };
 
