@@ -1,7 +1,10 @@
-const filterReducer = (state = "ALL", action) => {
+const filterReducer = (state = null, action) => {
   // ...
     console.log("filtered state now: ", state);
     console.log("filtered action", action);
+    if (action.type == "SET_FILTER") {
+      return state = action.payload
+    }
   return state
 };
 
