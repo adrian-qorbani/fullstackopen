@@ -6,6 +6,7 @@ const App = () => {
 
   const vote = (id) => {
     console.log('vote', id)
+    anecdotes.dispatch({ type: 'VOTE' })
   }
 
   return (
