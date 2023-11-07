@@ -24,16 +24,17 @@ const reducer = (state = initialState, action) => {
   console.log("action", action);
 
   if (action.type == "INCREMENT") {
-
     const id = action.payload.id;
-    const updatedAnecdote = state.find((anecdote) => anecdote.id === id);
+    const anecdoteToChange = state.find((anecdote) => anecdote.id === id);
     const changedAnecdote = {
-      ...updatedAnecdote,
-      votes: updatedAnecdote.votes + 1,
+      ...anecdoteToChange,
+      votes: anecdoteToChange.votes + 1,
     };
     return state.map((anecdote) =>
       anecdote.id !== id ? anecdote : changedAnecdote
     );
+  } else if (action.type == "NEW_NOTE") {
+    return state.concat(action.payload);
   }
   return state;
 };
@@ -44,6 +45,18 @@ export const vote = (id) => {
     type: "INCREMENT",
     payload: { id },
   };
+};
+
+export const addAnecdotes = (content) => {
+  console.log("anecdote: ", content);
+  return {
+    type: 'NEW_NOTE',
+    payload: {
+      content,
+      votes: 0,
+      id: getId()
+    }
+  }
 };
 
 export default reducer;
