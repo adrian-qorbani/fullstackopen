@@ -1,14 +1,15 @@
-const filterReducer = (state = 'ALL', action) => {
+const filterReducer = (state = "ALL", action) => {
   // ...
-  console.log("filtered state now: ", state);
-  console.log("filtered action", action);
-}
+    console.log("filtered state now: ", state);
+    console.log("filtered action", action);
+  return state
+};
 
-export const filterChange = filter => {
+export const filterChange = (filter) => {
   return {
-    type: 'SET_FILTER',
+    type: "SET_FILTER",
     payload: filter,
-  }
-}
+  };
+};
 
-export default filterReducer
+export default filterReducer;
