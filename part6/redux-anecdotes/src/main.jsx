@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom/client'
-// import { createStore } from 'redux'
 import { createStore, combineReducers } from 'redux'
 
 import { Provider } from 'react-redux'
@@ -23,9 +22,3 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </Provider>
 )
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <Provider store={store}>
-//     <div />
-//   </Provider>
-// )
