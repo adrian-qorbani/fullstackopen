@@ -1,19 +1,32 @@
 import ReactDOM from 'react-dom/client'
-import { createStore, combineReducers } from 'redux'
+// import { createStore, combineReducers } from 'redux'
+// import { configureStore } from '@reduxjs/toolkit'
+
 
 import { Provider } from 'react-redux'
 import App from './App'
 
+import store from "./utils/store"
+
 // import reducer from './reducers/anecdoteReducer'
-import anecdoteReducer from './reducers/anecdoteReducer'
-import filterReducer from './reducers/filterReducer'
+// import anecdoteReducer from './reducers/anecdoteReducer'
+// import filterReducer from './reducers/filterReducer'
 
-const reducer = combineReducers({
-  anecdotes: anecdoteReducer,
-  filter: filterReducer
-})
+// import noteReducer, { addAnecdotes, vote } from './reducers/anecdoteReducer'
 
-const store = createStore(reducer)
+// const reducer = combineReducers({
+//   anecdotes: anecdoteReducer,
+//   filter: filterReducer
+// })
+
+// const store = createStore(reducer)
+
+// const store = configureStore({
+//   reducer: {
+//     anecdotes: anecdoteReducer,
+//     filter: filterReducer
+//   }
+// })
 
 console.log(store.getState())
 
