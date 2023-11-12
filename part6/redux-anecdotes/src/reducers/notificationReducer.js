@@ -5,12 +5,16 @@ const notificationSlice = createSlice({
   initialState: "",
   reducers: {
     setNotification(state, action) {
-      console.log("Hello world!");
+      console.log("payload is", action.payload);
       return action.payload;
     },
+    hideNotification(state, action) {
+      console.log("action is" , action)
+      return null
+    }
   },
 });
 
 
-export const { setNotification } = notificationSlice.actions;
+export const { setNotification, hideNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;
