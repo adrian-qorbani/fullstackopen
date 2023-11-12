@@ -1,9 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 // import { vote } from "../reducers/anecdoteReducer";
-import anecdoteReducer, {
-  createAnecdote,
-  voteForAnecdote,
-} from "../reducers/anecdoteReducer";
+import { voteForAnecdote } from "../reducers/anecdoteReducer";
 
 const AnecdoteList = () => {
   // const anecdotes = useSelector((state) => state.anecdotes);

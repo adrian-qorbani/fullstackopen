@@ -80,20 +80,12 @@ const anecdoteSlice = createSlice({
     voteForAnecdote(state, action) {
       // should it be mutable?
       const id = action.payload;
-
-      console.log("payload for: ", action.payload)
-
-      console.log("voting for: ", id)
-
       const anecdoteToChange = state.find((anecdote) => anecdote.id === id);
-
-      console.log("targeted anecdote: ", anecdoteToChange)
-
       const changedAnecdote = {
         ...anecdoteToChange,
         votes: anecdoteToChange.votes + 1,
       };
-
+      // console.log(JSON.parse(JSON.stringify(state)))
       return state.map((anecdote) =>
         anecdote.id !== id ? anecdote : changedAnecdote
       );
