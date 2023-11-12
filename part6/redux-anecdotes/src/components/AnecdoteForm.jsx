@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 // import { addAnecdotes } from "../reducers/anecdoteReducer";
 
 import { createAnecdote } from '../reducers/anecdoteReducer'
+import { setNotification } from "../reducers/notificationReducer";
 
 const AnecdoteForm = () => {
   const anecdotes = useSelector((state) => state);
@@ -11,6 +12,7 @@ const AnecdoteForm = () => {
     const content = event.target.note.value;
     event.target.note.value = "";
     // dispatch(addAnecdotes(content));
+    dispatch(setNotification("added new anecdote."))
     dispatch(createAnecdote(content));
   };
 
