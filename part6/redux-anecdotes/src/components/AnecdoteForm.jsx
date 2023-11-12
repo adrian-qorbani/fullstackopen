@@ -1,21 +1,31 @@
 import { useSelector, useDispatch } from "react-redux";
 // import { addAnecdotes } from "../reducers/anecdoteReducer";
 
-import { createAnecdote } from '../reducers/anecdoteReducer'
-import { setNotification, hideNotification } from "../reducers/notificationReducer";
+import { createAnecdote } from "../reducers/anecdoteReducer";
+import {
+  setNotification,
+  hideNotification,
+} from "../reducers/notificationReducer";
+
+import anecdoteService from "../services/anecdotes";
 
 const AnecdoteForm = () => {
-  const anecdotes = useSelector((state) => state);
+  // const anecdotes = useSelector((state) => state);
   const dispatch = useDispatch();
-  const addAnecdote = (event) => {
+  const addAnecdote = async (event) => {
     event.preventDefault();
     const content = event.target.note.value;
     event.target.note.value = "";
-    dispatch(setNotification(`added new anecdote: ${content}.`))
+    dispatch(setNotification(`added new anecdote: ${content}.`));
+
+    await anecdoteService.create(content);
+
     dispatch(createAnecdote(content));
+    // dispatch(createAnecdote(createdAnecdote));
+
     setTimeout(() => {
-      dispatch(setNotification(""))
-    }, 5000)
+      dispatch(setNotification(""));
+    }, 5000);
   };
 
   return (
