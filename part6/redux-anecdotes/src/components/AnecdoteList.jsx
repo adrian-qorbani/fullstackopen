@@ -18,8 +18,6 @@ const AnecdoteList = () => {
     }
   });
 
-  console.log("my anecdotes:", anecdotes[1].votes);
-
   const dispatch = useDispatch();
 
   // Voting action creator
@@ -31,7 +29,8 @@ const AnecdoteList = () => {
     <>
       <h2>Anecdotes</h2>
       {anecdotes
-        // .sort((a, b) => b.votes - a.votes)
+        .slice()
+        .sort((a, b) => b.votes - a.votes)
         .map((anecdote) => (
           <div key={anecdote.id}>
             <div>{anecdote.content}</div>
