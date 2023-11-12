@@ -21,19 +21,30 @@ const anecdoteSlice = createSlice({
     },
     voteForAnecdote(state, action) {
       // should it be mutable?
-      const id = action.payload;
+
+      const id = action.payload.id;
+
+
       const anecdoteToChange = state.find((anecdote) => anecdote.id === id);
+
+
       const changedAnecdote = {
+
         ...anecdoteToChange,
+
         votes: anecdoteToChange.votes + 1,
+
       };
+
       // console.log(JSON.parse(JSON.stringify(state)))
+
       return state.map((anecdote) =>
+
         anecdote.id !== id ? anecdote : changedAnecdote
+
       );
     },
     appendAnecdote(state, action) {
-      console.log("action payload is:", action.payload);
       state.push(action.payload);
     },
     setAnecdotes(state, action) {
@@ -60,6 +71,17 @@ export const createAnecdote = (content) => {
   return async (dispatch) => {
     const newAnecdote = await anecdoteService.create(content);
     dispatch(appendAnecdote(newAnecdote));
+  };
+};
+
+export const voteAnecdote = (anecdote) => {
+  return async (dispatch) => {
+
+    const anecdoteToVoteFor = await anecdoteService.update({
+      ...anecdote,
+      votes: anecdote.votes + 1,
+    });
+    dispatch(voteForAnecdote(anecdoteToVoteFor));
   };
 };
 
