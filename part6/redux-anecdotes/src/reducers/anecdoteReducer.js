@@ -64,8 +64,8 @@ const initialState = anecdotesAtStart.map(asObject);
 // using Redux's createSlice
 const anecdoteSlice = createSlice({
   name: "anecdotes",
-  initialState,
-
+  // initialState,
+  initialState: [],
   reducers: {
     createAnecdote(state, action) {
       const content = action.payload;
@@ -89,12 +89,19 @@ const anecdoteSlice = createSlice({
       return state.map((anecdote) =>
         anecdote.id !== id ? anecdote : changedAnecdote
       );
-
+    },
+    appendAnecdote(state, action) {
+      console.log("action payload is:", action.payload);
+      state.push(action.payload);
+    },
+    setAnecdotes(state, action) {
+      return action.payload;
     },
   },
 });
 
 // export default reducer;
 
-export const { createAnecdote, voteForAnecdote } = anecdoteSlice.actions;
+export const { createAnecdote, voteForAnecdote, appendAnecdote, setAnecdotes } =
+  anecdoteSlice.actions;
 export default anecdoteSlice.reducer;
