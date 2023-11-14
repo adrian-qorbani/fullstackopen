@@ -15,7 +15,7 @@ const AnecdoteForm = () => {
     event.preventDefault();
     const content = event.target.anecdote.value;
     event.target.anecdote.value = "";
-    console.log("new anecdote");
+    console.log(`new anecdote ${content}`);
     newAnecdoteMutation.mutate({ content });
   };
 
