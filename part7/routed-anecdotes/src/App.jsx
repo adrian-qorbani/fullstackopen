@@ -4,8 +4,35 @@ import {
   Routes,
   Route,
   Link,
+  Navigate,
   useParams,
+  useNavigate,
 } from "react-router-dom";
+
+const Login = (props) => {
+  const navigate = useNavigate();
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    props.onLogin("mahdi");
+    navigate("/");
+  };
+
+  return (
+    <div>
+      <h2>login</h2>
+      <form onSubmit={onSubmit}>
+        <div>
+          username: <input />
+        </div>
+        <div>
+          password: <input type="password" />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  );
+};
 
 const Menu = () => {
   const padding = {
@@ -135,6 +162,7 @@ const CreateNew = (props) => {
 };
 
 const App = () => {
+  const [user, setUser] = useState(null);
   const [anecdotes, setAnecdotes] = useState([
     {
       content: "If it hurts, do it more often",
@@ -178,8 +206,13 @@ const App = () => {
         <h1>Software Anecdotes</h1>
         <Menu />
         <Routes>
+          <Route
+            path="/users"
+            element={user ? <Users /> : <Navigate replace to="/login" />}
+          />
           <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
           <Route path="/:id" element={<Anecdote anecdotes={anecdotes} />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/new" element={<CreateNew addNew={addNew} />} />
           <Route path="/about" element={<About />} />
         </Routes>
