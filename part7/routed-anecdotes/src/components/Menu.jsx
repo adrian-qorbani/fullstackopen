@@ -17,6 +17,10 @@ const Menu = () => {
         |{" "}
         <Link style={padding} to="/new">
           NEW ANECDOTE
+        </Link>{" "}
+        |{" "}
+        <Link style={padding} to="/users">
+          USERS
         </Link>
       </div>
       <div>

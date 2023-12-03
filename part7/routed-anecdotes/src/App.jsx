@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import About from "./components/About";
-import AnecdoteList from "./components/AnecdoteList";
-import CreateNew from "./components/CreateNew";
 import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import Routes from "./components/Routes";
