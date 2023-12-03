@@ -3,6 +3,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Footer from "./components/Footer";
 import Menu from "./components/Menu";
 import Routes from "./components/Routes";
+import { Container } from "@mui/material";
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -40,13 +42,13 @@ const App = () => {
   };
 
   return (
-    <div>
+    <Container>
       <Router>
         <Menu />
         <Routes anecdotes={anecdotes} addNew={addNew} />
         <Footer />
       </Router>
-    </div>
+    </Container>
   );
 };
 

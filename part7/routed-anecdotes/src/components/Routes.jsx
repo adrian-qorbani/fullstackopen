@@ -10,6 +10,15 @@ import {
 import CreateNew from "./CreateNew";
 import About from "./About";
 import Users from "./Users";
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from '@mui/material'
 
 const AppRouters = ({ anecdotes, addNew }) => {
   // Single Anecdote
@@ -27,13 +36,22 @@ const AppRouters = ({ anecdotes, addNew }) => {
   const AnecdoteList = ({ anecdotes }) => (
     <div>
       <h2>Anecdotes</h2>
-      <ul>
-        {anecdotes.map((anecdote) => (
-          <li key={anecdote.id}>
-            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-          </li>
-        ))}
-      </ul>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+            {anecdotes.map((anecdote) => (
+              <TableRow key={anecdote.id}>
+                <TableCell>
+                  <Link to={`/anecdotes/${anecdote.id}`}>
+                    {anecdote.content}
+                  </Link>{" "}
+                </TableCell>
+                <TableCell>{anecdote.author}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
   return (
