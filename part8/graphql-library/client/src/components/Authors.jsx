@@ -1,41 +1,35 @@
-const Authors = ({ authors }) => {
+import TableStyles from "./styles/TableStyles";
+import { useQuery } from "@apollo/client";
+import { ALL_AUTHORS } from "../utils/queries";
 
-  const tableStyle = {
-    border: "1px solid #ddd",
-    borderCollapse: "collapse",
-    width: "100%",
-  };
-  const thStyle = {
-    border: "1px solid #ddd",
-    backgroundColor: "#f2f2f2",
-    padding: "8px",
-    textAlign: "left",
-  };
-  const tdStyle = {
-    border: "1px solid #ddd",
-    padding: "8px",
-    textAlign: "left",
-  };
+const Authors = () => {
+  const result = useQuery(ALL_AUTHORS);
 
+  if (result.loading) {
+    return <div>loading...</div>;
+  }
+
+  const authors = result.data.allAuthors;
   return (
-<div>
+    <div>
+      <TableStyles />
       <h2>Authors</h2>
-      <table style={tableStyle}>
+      <table>
         <thead>
           <tr>
-            <th style={thStyle}>Name</th>
-            <th style={thStyle}>Born</th>
-            <th style={thStyle}>Book Count</th>
+            <th>Name</th>
+            <th>Born</th>
+            <th>Book Count</th>
           </tr>
         </thead>
         <tbody>
-          {authors.map(author =>
+          {authors.map((author) => (
             <tr key={author.name}>
-              <td style={tdStyle}>{author.name}</td>
-              <td style={tdStyle}>{author.born}</td>
-              <td style={tdStyle}>{author.bookCount}</td>
+              <td>{author.name}</td>
+              <td>{author.born}</td>
+              <td>{author.bookCount}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     </div>
