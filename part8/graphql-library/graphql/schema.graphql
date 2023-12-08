@@ -1,0 +1,22 @@
+
+const typeDefs = 
+  type Query {
+    bookCount: Int
+    authorCount: Int
+    allBooks: [Book!]!
+    allAuthors: [Author!]!
+  }
+
+  type Book {
+    title: String!
+    published: Int!
+    author: String!
+    genres: [String]
+  }
+
+  type Author {
+    name: String!
+    born: Int
+    bookCount: Int
+  }
+
