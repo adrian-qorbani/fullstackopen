@@ -26,6 +26,7 @@ const resolvers = {
         const bookCount = books.filter(book => book.author === author.name).length;
         return {
           name: author.name,
+          born: author.born,
           bookCount
         };
       });
