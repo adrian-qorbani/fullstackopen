@@ -1,7 +1,12 @@
 import { useState } from "react";
 import FormStyles from "./styles/FormStyles";
 import { useMutation } from "@apollo/client";
-import { CREATE_BOOK, ALL_BOOKS, ALL_AUTHORS } from "../utils/queries";
+import {
+  CREATE_BOOK,
+  ALL_BOOKS,
+  ALL_AUTHORS,
+  UPDATE_AUTHOR,
+} from "../utils/queries";
 
 const BookForm = () => {
   const [title, setTitle] = useState("");
@@ -10,8 +15,15 @@ const BookForm = () => {
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState([]);
 
+  const [changedAuthor, setChangedAuthor] = useState("");
+  const [born, setBorn] = useState("");
+
   const [addBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ]
+    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+  });
+
+  const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
   });
 
   const handleAddGenre = () => {
@@ -30,6 +42,15 @@ const BookForm = () => {
     };
     console.log(newBook);
     addBook({ variables: { title, author, published, genres } });
+  };
+
+  const handleUpdateAuthor = () => {
+    const updatedAuthor = {
+      name: changedAuthor,
+      setBornTo: parseInt(born),
+    };
+    console.log("updated author:", updatedAuthor);
+    updateAuthor({ variables: { name: changedAuthor, setBornTo: parseInt(born) } });
   };
 
   return (
@@ -84,6 +105,29 @@ const BookForm = () => {
         </div>
         <button type="button" onClick={handleCreateBook}>
           Create Book
+        </button>
+      </form>
+      <form>
+        <div>
+          <label htmlFor="title">Author name:</label>
+          <input
+            type="text"
+            id="author-name"
+            value={changedAuthor}
+            onChange={(e) => setChangedAuthor(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="title">born:</label>
+          <input
+            type="text"
+            id="author-born"
+            value={born}
+            onChange={(e) => setBorn(e.target.value)}
+          />
+        </div>
+        <button type="button" onClick={handleUpdateAuthor}>
+          Update Author
         </button>
       </form>
     </div>
