@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FormStyles from "./styles/FormStyles";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   CREATE_BOOK,
   ALL_BOOKS,
@@ -17,8 +17,6 @@ const BookForm = () => {
 
   const [changedAuthor, setChangedAuthor] = useState("");
   const [born, setBorn] = useState("");
-
-  const arrayOfAuthors = useQuery(ALL_AUTHORS);
 
   const [addBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
@@ -52,18 +50,8 @@ const BookForm = () => {
       setBornTo: parseInt(born),
     };
     console.log("updated author:", updatedAuthor);
-    updateAuthor({
-      variables: { name: changedAuthor, setBornTo: parseInt(born) },
-    });
+    updateAuthor({ variables: { name: changedAuthor, setBornTo: parseInt(born) } });
   };
-
-  if (arrayOfAuthors.loading) {
-    return <div>loading...</div>;
-  }
-  // Authors array
-  const authors = arrayOfAuthors.data.allAuthors;
-
-  console.log(authors);
 
   return (
     <div>
@@ -121,23 +109,13 @@ const BookForm = () => {
       </form>
       <form>
         <div>
-          {/* <label htmlFor="title">Author name:</label>
+          <label htmlFor="title">Author name:</label>
           <input
             type="text"
             id="author-name"
             value={changedAuthor}
             onChange={(e) => setChangedAuthor(e.target.value)}
-          /> */}
-          <select
-            value={changedAuthor}
-            onChange={(event) => setChangedAuthor(event.target.value)}
-          >
-            {authors.map((option) => (
-              <option key={option.name} value={option.name}>
-                {option.name}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <div>
           <label htmlFor="title">born:</label>
