@@ -1,4 +1,6 @@
 const { v1: uuid } = require('uuid')
+const mongoose = require('mongoose')
+mongoose.set('strictQuery', false)
 
 // Resolvers
 const books = require('../library/books.json');
@@ -6,9 +8,9 @@ const authors = require('../library/authors.json');
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
+    bookCount: async () => books.length,
+    authorCount: async () => authors.length,
+    allBooks: async (root, args) => {
       let filteredBooks = [...books]
       // filter based on author given
       if (args.author) {
@@ -65,9 +67,6 @@ const resolvers = {
       const newBook = { ...args, id: uuid() };
       // update books
       books.push(newBook);
-
-      // I should consider writing existent changes to JSONs....(work in progress)
-
       return newBook;
     },
     addAuthor: (root, args) => {
@@ -87,9 +86,6 @@ const resolvers = {
 
         return authorData;
       }
-
-      // If the author already exists, throw error (work in progress)
-
       return null;
     },
     editAuthor: (root, args) => {

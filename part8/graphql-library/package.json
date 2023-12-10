@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.9.5",
+    "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
-    "graphql-practice": "github:adrian-qorbani/graphql-practice"
+    "graphql-practice": "github:adrian-qorbani/graphql-practice",
+    "mongoose": "^8.0.3"
   }
 }
