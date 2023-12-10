@@ -10,7 +10,7 @@ require('dotenv').config()
 
 const MONGODB_URI = process.env.MONGODB_URI
 
-console.log('connecting to', MONGODB_URI)
+console.log('connecting to mongodb in progress...')
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
@@ -53,8 +53,21 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      return await addBook(args);
-    },
+      try {
+        const newBook = await addBook(args);
+        return newBook;
+      } catch (error) {
+        // If an error occurs during the save operation, throw a GraphQL error
+        throw new GraphQLError('Saving book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
+    }
+    ,
     addAuthor: async (root, args) => {
       return await addAuthor(args);
     },
