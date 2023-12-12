@@ -4,7 +4,8 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const typeDefs = require("./schema/schema")
 // const resolvers = require("./resolvers/resolvers")
-const { Book, Author, addBook, addAuthor, editAuthor } = require("./schema/bookSchema")
+const { Book, Author, addBook, addAuthor, editAuthor } = require("./schema/bookSchema");
+const { GraphQLError } = require('graphql');
 
 require('dotenv').config()
 
@@ -69,10 +70,34 @@ const resolvers = {
     }
     ,
     addAuthor: async (root, args) => {
-      return await addAuthor(args);
+      // return await addAuthor(args);
+      try {
+        const newAuthor = await addAuthor(args);
+        return newAuthor;
+      } catch (error) {
+        throw new GraphQLError('Saving author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
     },
     editAuthor: async (root, args) => {
-      return await editAuthor(args);
+      try {
+        const updatedAuthor = await editAuthor(args);
+        return updatedAuthor;
+      } catch (error) {
+        // If an error occurs during the update operation, throw a GraphQL error
+        throw new GraphQLError('Editing author failed', {
+          extensions: {
+            code: 'INTERNAL_SERVER_ERROR',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
     }
   }
 };
