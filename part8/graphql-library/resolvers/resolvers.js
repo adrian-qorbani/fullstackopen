@@ -1,103 +1,122 @@
-const { v1: uuid } = require('uuid')
-const mongoose = require('mongoose')
-mongoose.set('strictQuery', false)
+const jwt = require('jsonwebtoken')
+const { Book, Author, addBook, addAuthor, editAuthor, addUser, User } = require("../schema/bookSchema");
+const { GraphQLError } = require('graphql');
 
-// Resolvers
-const books = require('../library/books.json');
-const authors = require('../library/authors.json');
+require('dotenv').config()
+
 
 const resolvers = {
   Query: {
-    bookCount: async () => books.length,
-    authorCount: async () => authors.length,
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      let filteredBooks = [...books]
-      // filter based on author given
-      if (args.author) {
-        filteredBooks = filteredBooks.filter(book => book.author === args.author);
-      }
-      // filter based on genre given [exercise 8.5]
-      if (args.genre) {
-        filteredBooks = filteredBooks.filter(book => book.genres.includes(args.genre));
-      }
-
-      return filteredBooks;
+      return await Book.find(args);
     },
-    allAuthors: () => {
-      const authorBookCounts = authors.map(author => {
-        const bookCount = books.filter(book => book.author === author.name).length;
-        return {
-          name: author.name,
-          born: author.born,
-          bookCount
-        };
-      });
-      return authorBookCounts;
+    allAuthors: async () => {
+      return await Author.aggregate([
+        {
+          $lookup: {
+            from: "books",
+            localField: "name",
+            foreignField: "author",
+            as: "books"
+          }
+        },
+        {
+          $project: {
+            name: 1,
+            born: 1,
+            bookCount: { $size: "$books" }
+          }
+        }
+      ]);
     }
   },
   Book: {
-    title: (root) => root.title,
-    published: (root) => root.published,
-    author: (root) => root.author,
-    genres: (root) => root.genres,
-    // id: (root) => root.id
+    // 
   },
   Mutation: {
-    addBook: (root, args) => {
-      const { title, author: newAuthor, published, genres } = args;
-
-      // check if author exist upon adding a book with an author
-      const existingAuthor = authors.find(author => author.name === newAuthor);
-      if (!existingAuthor) {
-        const newAuthorId = uuid();
-        const authorData = {
-          id: newAuthorId,
-          name: newAuthor,
-          born: null,
-          bookCount: 1
-        };
-        // update authors
-        authors.push(authorData);
-
-        authorId = newAuthorId;
-      } else {
-        authorId = existingAuthor.id;
-        existingAuthor.bookCount++;
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError("Not authenticated.")
       }
-      const newBook = { ...args, id: uuid() };
-      // update books
-      books.push(newBook);
-      return newBook;
-    },
-    addAuthor: (root, args) => {
-      const { name, born } = args;
-      const existingAuthor = authors.find(author => author.name === name);
-
-      if (!existingAuthor) {
-        const newAuthorId = uuid();
-        const authorData = {
-          id: newAuthorId,
-          name,
-          born,
-          bookCount: 0
-        };
-
-        authors.push(authorData);
-
-        return authorData;
+      try {
+        const newBook = await addBook(args);
+        return newBook;
+      } catch (error) {
+        // If an error occurs during the save operation, throw a GraphQL error
+        throw new GraphQLError('Saving book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
       }
-      return null;
-    },
-    editAuthor: (root, args) => {
-      const { name, setBornTo } = args;
-      const updatedAuthor = authors.find(author => author.name === name);
-      if (updatedAuthor) {
-        updatedAuthor.born = setBornTo
-        return updatedAuthor
-      }
-      return null;
     }
-  }
-};
+    ,
+    addAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError("Not authenticated.")
+      }
+      try {
+        const newAuthor = await addAuthor(args);
+        return newAuthor;
+      } catch (error) {
+        throw new GraphQLError('Saving author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
 
-module.exports = resolvers;
+    },
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError("Not Authenticated")
+      }
+      try {
+        const updatedAuthor = await editAuthor(args);
+        return updatedAuthor;
+      } catch (error) {
+        // If an error occurs during the update operation, throw a GraphQL error
+        throw new GraphQLError('Editing author failed', {
+          extensions: {
+            code: 'INTERNAL_SERVER_ERROR',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      }
+    }, createUser: async (root, args) => {
+      // try {
+      const newUser = await addUser(args);
+      return newUser;
+
+    },
+    login: async (root, args) => {
+
+      const user = await User.findOne({ username: args.username });
+      if (!user || args.password !== 'secret') {
+        throw new GraphQLError('wrong credentials', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+
+    },
+  },
+}
+
+module.exports = {resolvers}
