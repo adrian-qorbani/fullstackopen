@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator')
+require('dotenv').config()
 
 // Define the Mongoose schema for Book
 const bookSchema = new mongoose.Schema({

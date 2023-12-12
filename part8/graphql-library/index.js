@@ -23,6 +23,7 @@ mongoose.connect(MONGODB_URI)
   })
 
 ///////////////////////////
+
 const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
@@ -54,7 +55,11 @@ const resolvers = {
     // 
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError("Not authenticated.")
+      }
       try {
         const newBook = await addBook(args);
         return newBook;
@@ -70,8 +75,11 @@ const resolvers = {
       }
     }
     ,
-    addAuthor: async (root, args) => {
-      // return await addAuthor(args);
+    addAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError("Not authenticated.")
+      }
       try {
         const newAuthor = await addAuthor(args);
         return newAuthor;
@@ -84,8 +92,13 @@ const resolvers = {
           }
         })
       }
+
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new GraphQLError("Not Authenticated")
+      }
       try {
         const updatedAuthor = await editAuthor(args);
         return updatedAuthor;
@@ -106,19 +119,6 @@ const resolvers = {
 
     },
     login: async (root, args) => {
-      // const user = await User.findOne({ username: args.username })
-      // if (!user || args.password !== 'secret') {
-      //   throw new GraphQLError('wrong credentials', {
-      //     extensions: {
-      //       code: 'BAD_USER_INPUT'
-      //     }
-      //   })
-      // }
-      // const userForToken = {
-      //   username: user.username,
-      //   id: user._id,
-      // }
-      // return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
 
       const user = await User.findOne({ username: args.username });
       if (!user || args.password !== 'secret') {
@@ -139,15 +139,52 @@ const resolvers = {
 }
 
 
-///////////////////////////
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  // context: async ({ req }) => {
+  //   console.log("req:", req )
+
+  //   const auth = req ? req.headers.authorization : null
+  //   console.log("context:", auth )
+  //   if (auth && auth.toLowerCase().startsWith('bearer ')) {
+  //     const decodedToken = jwt.verify(
+  //       auth.substring(7), process.env.JWT_SECRET
+  //     )
+  //     const currentUser = await User.findById(decodedToken.id)
+  //     return { currentUser }
+  //   }
+  // }
 })
 
 startStandaloneServer(server, {
   listen: { port: process.env.PORT },
+  context: async ({ req, res }) => {
+
+
+    const auth = req ? req.headers.authorization : null
+
+    if (auth && auth.startsWith("Bearer ")) {
+
+      console.log("CONNECTED!")
+      const decodedToken = jwt.verify(
+        auth.substring(7), process.env.JWT_SECRET
+      )
+      console.log("decoded:", decodedToken)
+
+      const currentUser = await User
+
+        .findById(decodedToken.id)
+
+      console.log(currentUser)
+
+      return { currentUser }
+
+    } else {
+      console.log("not authenticated")
+    }
+  },
 }).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`)
+  console.log(`Server ready at ${url} 🚀`)
 })
