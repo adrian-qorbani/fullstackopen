@@ -1,35 +1,43 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator')
 
 // Define the Mongoose schema for Book
 const bookSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    minlength: 4
   },
   published: {
     type: Number,
     required: true
   },
   author: {
-    type: String
-    // I might want to reference the Author model here if each book has a unique author
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Author'
   },
   genres: {
     type: [String]
   }
 });
 
+bookSchema.plugin(uniqueValidator)
+
 // Define the Mongoose schema for Author
 const authorSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    minlength: 4
   },
   born: {
     type: Number
   }
 });
+
+authorSchema.plugin(uniqueValidator)
 
 // Define Mongoose models
 const Book = mongoose.model('Book', bookSchema);
