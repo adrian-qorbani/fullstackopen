@@ -87,5 +87,6 @@ module.exports = {
   addBook,
   addAuthor,
   editAuthor,
-  addUser
+  addUser,
+  User
 };

@@ -5,7 +5,7 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const typeDefs = require("./schema/schema")
 // const resolvers = require("./resolvers/resolvers")
-const { Book, Author, addBook, addAuthor, editAuthor, addUser } = require("./schema/bookSchema");
+const { Book, Author, addBook, addAuthor, editAuthor, addUser, User } = require("./schema/bookSchema");
 const { GraphQLError } = require('graphql');
 
 require('dotenv').config()
@@ -101,24 +101,26 @@ const resolvers = {
       }
     }, createUser: async (root, args) => {
       // try {
-        const newUser = await addUser(args);
-        return newUser;
+      const newUser = await addUser(args);
+      return newUser;
 
-      // } catch (error) {
-      //   throw new GraphQLError('Creating the user failed', {
-      //     extensions: {
-      //       code: 'BAD_USER_INPUT',
-      //       invalidArgs: args.username,
-      //       error
-      //     }
-      //   })
-
-      // }
-      // const user = new User({ username: args.username })
     },
     login: async (root, args) => {
-      const user = await User.findOne({ username: args.username })
+      // const user = await User.findOne({ username: args.username })
+      // if (!user || args.password !== 'secret') {
+      //   throw new GraphQLError('wrong credentials', {
+      //     extensions: {
+      //       code: 'BAD_USER_INPUT'
+      //     }
+      //   })
+      // }
+      // const userForToken = {
+      //   username: user.username,
+      //   id: user._id,
+      // }
+      // return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
 
+      const user = await User.findOne({ username: args.username });
       if (!user || args.password !== 'secret') {
         throw new GraphQLError('wrong credentials', {
           extensions: {
@@ -126,13 +128,12 @@ const resolvers = {
           }
         })
       }
-
       const userForToken = {
         username: user.username,
         id: user._id,
       }
-
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+
     },
   },
 }
@@ -148,5 +149,5 @@ const server = new ApolloServer({
 startStandaloneServer(server, {
   listen: { port: process.env.PORT },
 }).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
+  console.log(`🚀 Server ready at ${url}`)
 })
