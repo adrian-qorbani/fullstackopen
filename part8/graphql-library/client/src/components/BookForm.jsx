@@ -7,6 +7,7 @@ import {
   ALL_AUTHORS,
   UPDATE_AUTHOR,
 } from "../utils/queries";
+import { updateCache } from "../App";
 
 const BookForm = () => {
   const [title, setTitle] = useState("");
@@ -20,15 +21,11 @@ const BookForm = () => {
 
   const [addBook] = useMutation(CREATE_BOOK, {
     // refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
-    onError: (error) => {      
-      console.log(error.graphQLErrors[0].message)    
+    onError: (error) => {
+      console.log(error);
     },
     update: (cache, response) => {
-      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data.addBook),
-        }
-      })
+      updateCache(cache, { query: ALL_BOOKS }, response.data.addBook);
     },
   });
 
@@ -60,7 +57,9 @@ const BookForm = () => {
       setBornTo: parseInt(born),
     };
     console.log("updated author:", updatedAuthor);
-    updateAuthor({ variables: { name: changedAuthor, setBornTo: parseInt(born) } });
+    updateAuthor({
+      variables: { name: changedAuthor, setBornTo: parseInt(born) },
+    });
   };
 
   return (

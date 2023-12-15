@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useQuery, useMutation, useSubscription } from "@apollo/client";
 import { useApolloClient } from "@apollo/client";
 
-import { LOGIN } from "./utils/queries";
+import { ALL_BOOKS, BOOK_ADDED, LOGIN } from "./utils/queries";
 
 import Authors from "./components/Authors";
 import "./App.css";
@@ -15,6 +15,24 @@ import Notify from "./components/Notify";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Profile from "./components/Profile";
+
+export const updateCache = (cache, query, addedBook) => {
+  // helper that is used to eliminate saving same book twice
+  const uniqByName = (a) => {
+    let seen = new Set()
+    return a.filter((item) => {
+      let k = item.name
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByName(allBooks.concat(addedBook)),
+    }
+  })
+}
+
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -31,6 +49,20 @@ const App = () => {
       }, 3000);
     },
   });
+
+  // useSubscription(BOOK_ADDED, {
+  //   onData: ({ data }) => {
+  //     console.log(data)
+  //   }
+  // })
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+      console.log(`${addedBook.title} added`)
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+    }
+  })
 
   useEffect(() => {
     if (result.data) {
