@@ -19,10 +19,17 @@ const BookForm = () => {
   const [born, setBorn] = useState("");
 
   const [addBook] = useMutation(CREATE_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    // refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {      
       console.log(error.graphQLErrors[0].message)    
-    }
+    },
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(response.data.addBook),
+        }
+      })
+    },
   });
 
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {

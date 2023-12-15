@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import Notify from "./components/Notify";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Profile from "./components/Profile";
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -75,8 +76,13 @@ const App = () => {
             </Link>
           ) : (
             <>
+              {" "}
+              |{" "}
               <Link style={padding} to="/bookform">
-                ADD BOOK
+                Add Book
+              </Link>{" "}
+              <Link style={padding} to="/profile">
+                User Profile
               </Link>{" "}
               <a style={padding} onClick={() => logout()}>
                 Log Out
@@ -90,6 +96,7 @@ const App = () => {
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
           <Route path="/bookform" element={<BookForm />} />
+          <Route path="/profile" element={<Profile />} />
           <Route
             path="/login"
             element={
@@ -106,8 +113,8 @@ const App = () => {
 
         <Footer />
         <a style={padding} onClick={() => logout()}>
-                Log Out
-              </a>
+          Log Out
+        </a>
       </Router>{" "}
     </>
   );

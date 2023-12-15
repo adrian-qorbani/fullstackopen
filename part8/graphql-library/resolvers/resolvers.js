@@ -7,6 +7,13 @@ require('dotenv').config()
 
 const resolvers = {
   Query: {
+    me: async (root, args, { currentUser }) => {
+      if(currentUser) {
+        return currentUser
+      } else  {
+        throw new GraphQLError("No logged user detected.")
+      }
+    },
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
@@ -119,4 +126,4 @@ const resolvers = {
   },
 }
 
-module.exports = {resolvers}
+module.exports = { resolvers }
