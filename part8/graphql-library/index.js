@@ -13,10 +13,10 @@ console.log('connecting to mongodb in progress...')
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
-    console.log('connected to MongoDB.')
+    console.log('\x1b[32m%s\x1b[0m', 'MongoDB connection established.')
   })
   .catch((error) => {
-    console.log('error connection to MongoDB:', error.message)
+    console.log(`'\x1b[31m%s\x1b[0m', Failed to connect to MongoDB: ${error.message}`)
   })
 
 const server = new ApolloServer({
@@ -41,5 +41,5 @@ startStandaloneServer(server, {
     }
   },
 }).then(({ url }) => {
-  console.log(`Server ready at ${url} 🚀`)
+  console.log(`\x1b[35mServer ready at\x1b[0m ${url} 🚀`);
 })
