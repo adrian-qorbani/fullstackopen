@@ -1,3 +1,6 @@
+// Legacy version uses startStandaloneServer but lacks substantial features available in expressMiddleware
+// Doesn't support subscriptions
+ 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false)
 const jwt = require('jsonwebtoken')
