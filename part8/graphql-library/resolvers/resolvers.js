@@ -121,7 +121,7 @@ const resolvers = {
     login: async (root, args) => {
 
       const user = await User.findOne({ username: args.username });
-      if (!user || args.password !== 'secret') {
+      if (!user || args.password !== process.env.JWT_SECRET) {
         throw new GraphQLError('wrong credentials', {
           extensions: {
             code: 'BAD_USER_INPUT'
