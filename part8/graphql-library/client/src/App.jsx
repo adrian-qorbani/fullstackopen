@@ -4,10 +4,10 @@ import Books from "./components/Books";
 import BookForm from "./components/BookForm";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./components/Home";
-
+import Footer from "./components/Footer";
 const App = () => {
   const padding = {
-    padding: 6,
+    padding: 10,
   };
 
   return (
@@ -37,13 +37,7 @@ const App = () => {
         <Route path="/bookform" element={<BookForm />} />
         <Route path="/login" element={<Books />} />
       </Routes>
-
-      {/* <BookForm />
-      <Authors />
-      <Books /> */}
-      <div>
-        <i>Library Collection App, Mahdi GH. 2023</i>
-      </div>
+      <Footer />
     </Router>
   );
 };

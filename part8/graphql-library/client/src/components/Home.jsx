@@ -1,6 +1,6 @@
-// import TableStyles from "./styles/TableStyles";
 
 const Home = () => {
+  
   return (
     <div>
       <h1>📖 Library Collection</h1>
