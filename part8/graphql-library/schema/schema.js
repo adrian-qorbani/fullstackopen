@@ -31,8 +31,11 @@ const typeDefs = `
   type Token {
     value: String!
   }
-  
 
+  type Subscription {
+    bookAdded: Book!
+  }   
+  
   type Mutation {
     addBook(
       title: String!

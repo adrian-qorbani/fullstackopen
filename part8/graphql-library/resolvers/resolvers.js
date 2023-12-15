@@ -1,16 +1,18 @@
 const jwt = require('jsonwebtoken')
 const { Book, Author, addBook, addAuthor, editAuthor, addUser, User } = require("../schema/bookSchema");
 const { GraphQLError } = require('graphql');
+const { PubSub } = require('graphql-subscriptions')
 
 require('dotenv').config()
 
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
     me: async (root, args, { currentUser }) => {
-      if(currentUser) {
+      if (currentUser) {
         return currentUser
-      } else  {
+      } else {
         throw new GraphQLError("No logged user detected.")
       }
     },
@@ -45,12 +47,18 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args, context) => {
       const currentUser = context.currentUser
+      const newBook = await addBook(args);
+
       if (!currentUser) {
-        throw new GraphQLError("Not authenticated.")
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        })
       }
       try {
-        const newBook = await addBook(args);
-        return newBook;
+        await newBook.save()
+        await currentUser.save()
       } catch (error) {
         // If an error occurs during the save operation, throw a GraphQL error
         throw new GraphQLError('Saving book failed', {
@@ -61,6 +69,10 @@ const resolvers = {
           }
         })
       }
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
+      return newBook;
+
     }
     ,
     addAuthor: async (root, args, context) => {
@@ -124,7 +136,11 @@ const resolvers = {
 
     },
   },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
+    },
+  },
 }
 
-// module.exports = { resolvers }
-module.exports =  resolvers 
+module.exports = resolvers 
