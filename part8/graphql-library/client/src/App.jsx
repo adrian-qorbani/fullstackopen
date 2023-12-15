@@ -26,8 +26,8 @@ const App = () => {
     onError: (error) => {
       setErrorMessage(error.graphQLErrors[0].message);
       setTimeout(() => {
-        setErrorMessage("")
-      }, 3000)
+        setErrorMessage("");
+      }, 3000);
     },
   });
 
@@ -58,7 +58,6 @@ const App = () => {
   return (
     <>
       <Router>
-        {console.count("counter")}
         <div className="navbar">
           <Link style={padding} to="/">
             HOME
@@ -87,23 +86,29 @@ const App = () => {
         </div>
         <Notify errorMessage={errorMessage} />
         <Routes>
-          {console.count("counter")}
           <Route path="/" element={<Home />} />
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
           <Route path="/bookform" element={<BookForm />} />
-          <Route path="/login" element={<LoginForm />} />
+          <Route
+            path="/login"
+            element={
+              <LoginForm
+                username={username}
+                password={password}
+                setUsername={setUsername}
+                setPassword={setPassword}
+                submit={handleLogin}
+              />
+            }
+          />
         </Routes>
-        {console.count("counter")}
+
         <Footer />
-      </Router>
-      <LoginForm
-        username={username}
-        password={password}
-        setUsername={setUsername}
-        setPassword={setPassword}
-        submit={handleLogin}
-      />{" "}
+        <a style={padding} onClick={() => logout()}>
+                Log Out
+              </a>
+      </Router>{" "}
     </>
   );
 };

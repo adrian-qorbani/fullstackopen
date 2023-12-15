@@ -4,7 +4,7 @@ import { ALL_AUTHORS } from "../utils/queries";
 
 const Authors = () => {
   const result = useQuery(ALL_AUTHORS);
-
+  console.log("result authors:", result)
   if (result.loading) {
     return <div>loading...</div>;
   }
