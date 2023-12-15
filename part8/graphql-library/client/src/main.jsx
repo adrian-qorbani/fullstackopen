@@ -17,7 +17,6 @@ import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
-  gql,
 } from "@apollo/client";
 
 const client = new ApolloClient({
@@ -29,7 +28,6 @@ const client = new ApolloClient({
 //   console.log(response.data);
 // });
 
-// ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
