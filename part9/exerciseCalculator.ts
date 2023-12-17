@@ -8,23 +8,20 @@ interface ExerciseResult {
   average: number;
 }
 
-const calculateExercises = (
-  hours: number[],
-  target: number
-): ExerciseResult => {
+const calculateExercises = (hours: number[], target: number): ExerciseResult => {
   const periodLength = hours.length;
   const trainingDays = hours.filter((hour) => hour > 0).length;
   const average = hours.reduce((a, b) => a + b, 0) / periodLength;
   const success = average >= target;
   let rating = 1;
-  let ratingDescription = "You can do better!";
+  let ratingDescription = 'You can do better!';
 
   if (success) {
     rating = 3;
-    ratingDescription = "Well done! You reached your target.";
+    ratingDescription = 'Well done! You reached your target.';
   } else if (average < target && average >= target - 1) {
     rating = 2;
-    ratingDescription = "Not bad, but could be better.";
+    ratingDescription = 'Not bad, but could be better.';
   }
 
   return {
@@ -38,7 +35,9 @@ const calculateExercises = (
   };
 };
 
-const exerciseHours = [3, 0, 2, 4.5, 0, 3, 1];
-const targetHours = 2;
+const args = process.argv.slice(2).map(Number);
 
-console.log(calculateExercises(exerciseHours, targetHours));
+const targetValue = args[0];
+const exerciseHours = args.slice(1);
+
+console.log(calculateExercises(exerciseHours, targetValue));
