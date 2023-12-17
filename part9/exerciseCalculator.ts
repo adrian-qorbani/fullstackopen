@@ -9,6 +9,10 @@ interface ExerciseResult {
 }
 
 const calculateExercises = (hours: number[], target: number): ExerciseResult => {
+  if (hours.length === 0) {
+    throw new Error('Please provide valid exercise hours.');
+  }
+  
   const periodLength = hours.length;
   const trainingDays = hours.filter((hour) => hour > 0).length;
   const average = hours.reduce((a, b) => a + b, 0) / periodLength;
@@ -35,9 +39,27 @@ const calculateExercises = (hours: number[], target: number): ExerciseResult => 
   };
 };
 
-const args = process.argv.slice(2).map(Number);
+const parseArguments = (args: Array<string>): { target: number, hours: Array<number> } => {
+  if (args.length < 3) throw new Error('Not enough arguments.');
+  
+  const target = Number(args[2]);
+  if (isNaN(target)) {
+    throw new Error('Invalid target input.');
+  }
+  
+  const exerciseHours = args.slice(3).map(Number);
+  if (exerciseHours.some(isNaN)) {
+    throw new Error('Invalid exercise hours input.');
+  }
+  
+  return {
+    target,
+    hours: exerciseHours,
+  };
+};
 
-const targetValue = args[0];
-const exerciseHours = args.slice(1);
-
-console.log(calculateExercises(exerciseHours, targetValue));
+try {
+  console.log(calculateExercises(parseArguments(process.argv).hours, parseArguments(process.argv).target));
+} catch (error: unknown) {
+  console.log('Something bad happened:', error instanceof Error ? error.message : 'unknown error.');
+}
