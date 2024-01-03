@@ -1,0 +1,19 @@
+name: Hello World for Pokedex
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-20.04
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Say hello in Pokedex
+        run: |
+          cd /part11/pokedex
+          echo "Hello World!"
