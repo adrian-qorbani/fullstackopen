@@ -1,4 +1,4 @@
-name: Hello World for Pokedex
+name: hello actions
 
 on:
   push:
@@ -16,3 +16,9 @@ jobs:
       - name: Say hello
         run: |
           echo "Hello World!"
+
+      - name: Print the date
+        run: date
+
+      - name: List current directory contents in long format
+        run: ls -l
