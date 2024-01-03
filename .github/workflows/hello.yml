@@ -13,7 +13,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Say hello in Pokedex
+      - name: Say hello
         run: |
-          cd /part11/pokedex
           echo "Hello World!"
