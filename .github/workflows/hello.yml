@@ -3,7 +3,9 @@ name: hello actions
 on:
   push:
     branches:
-      - main
+      - master
+    paths:
+      - 'part11/pokedx/**' 
 
 jobs:
   hello_world_job:
@@ -11,7 +13,7 @@ jobs:
     
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Say hello
         run: |
