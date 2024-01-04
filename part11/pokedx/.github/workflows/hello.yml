@@ -1,0 +1,24 @@
+name: hello actions
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-20.04
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Say hello
+        run: |
+          echo "Hello World!"
+
+      - name: Print the date
+        run: date
+
+      - name: List current directory contents in long format
+        run: ls -l
