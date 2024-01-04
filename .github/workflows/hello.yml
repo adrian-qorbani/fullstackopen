@@ -3,7 +3,7 @@ name: hello actions
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'part11/pokedx/**' 
 

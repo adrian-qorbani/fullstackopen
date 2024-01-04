@@ -3,9 +3,8 @@ name: Deployment pipeline
 on:
   push:
     branches:
-      - master
-    paths:
-      - 'part11/pokedx/**' 
+      - main
+
 
 jobs:
   simple_deployment_pipeline:
