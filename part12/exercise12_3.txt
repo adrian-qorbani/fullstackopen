@@ -1,0 +1,4 @@
+docker run -it ubuntu
+nano /usr/src/app/index.js
+echo "console.log('Hello, World!');" > /usr/src/app/index.js
+exit

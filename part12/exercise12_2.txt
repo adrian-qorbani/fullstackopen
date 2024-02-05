@@ -1,5 +1,5 @@
-docker run -it ubuntu
-mkdir -p /usr/src/app
-nano /usr/src/app/index.js
-echo "console.log('Hello, World!');" > /usr/src/app/index.js
+sudo docker run -it ubuntu
+root@85a0911eb1d8:/# mkdir -p /usr/src/app
+root@85a0911eb1d8:/# touch /usr/src/app/index.js
+root@85a0911eb1d8:/# exit
 exit
