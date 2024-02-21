@@ -35,12 +35,34 @@ singleRouter.delete('/', async (req, res) => {
 
 /* GET todo. */
 singleRouter.get('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
-});
+  if (!req.todo) {
+    return res.sendStatus(404);
+  }
+  res.json(req.todo);});
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+  const { text, done } = req.body;
+  // Ensure that both text and done fields are provided
+  if (!text || !done) {
+    return res.status(400).json({ error: 'Text and done fields are required' });
+  }
+
+  try {
+    if (!req.todo || !req.todo._id) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    req.todo.text = text;
+    req.todo.done = done;
+
+    const updatedTodo = await req.todo.save();
+
+    res.json(updatedTodo);
+  } catch (error) {
+    console.error('Error updating todo:', error);
+    res.status(500).json({ error: 'Failed to update todo' });
+  }
 });
 
 router.use('/:id', findByIdMiddleware, singleRouter)
