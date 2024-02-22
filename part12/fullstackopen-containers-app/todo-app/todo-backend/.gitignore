@@ -62,3 +62,6 @@ typings/
 
 # local db
 mongo_data/
+
+# local redis dump
+redis_data/dump.rdb
