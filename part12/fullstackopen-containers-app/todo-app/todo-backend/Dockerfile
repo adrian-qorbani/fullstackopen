@@ -8,4 +8,6 @@ RUN npm ci
 ENV DEBUG=todo-backend:*
   
 USER node
+EXPOSE 3000
+
 CMD npm start
