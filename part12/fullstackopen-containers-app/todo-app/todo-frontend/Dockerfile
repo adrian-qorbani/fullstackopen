@@ -1,7 +1,6 @@
-FROM node:16
+# The first FROM is now a stage called build-stage
 
-ENV REACT_APP_BACKEND_URL="http://localhost:3000"
-
+FROM node:16 AS build-stage
 WORKDIR /usr/src/app
 
 COPY . .
@@ -10,6 +9,10 @@ RUN npm ci
 
 RUN npm run build
 
-RUN npm install -g serve
+# This is a new stage, everything before this is gone, except the files we want to COPY
 
-CMD ["sh", "-c", "CI=true npm test && serve -s build"]
+FROM nginx:1.20-alpine
+# COPY the directory build from build-stage to /usr/share/nginx/html
+# The target location here was found from the Docker hub page
+
+COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
