@@ -28,7 +28,7 @@ Blog.init(
     },
     author: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     url: {
       type: DataTypes.TEXT,
@@ -36,6 +36,10 @@ Blog.init(
     },
     date: {
       type: DataTypes.DATE,
+    },
+    likes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   },
   {
