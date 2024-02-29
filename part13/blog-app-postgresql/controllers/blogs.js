@@ -50,4 +50,23 @@ router.delete("/api/blogs/:id", async (req, res) => {
   }
 });
 
+// UPDATE Blog likes
+router.put("/api/blogs/:id", async (req, res) => {
+  const { id } = req.params;
+  const { likes } = req.body;
+
+  try {
+    const blog = await Blog.findByPk(id);
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found." });
+    }
+
+    await blog.update({ likes });
+
+    return res.json(blog);
+  } catch (error) {
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 module.exports = router;
