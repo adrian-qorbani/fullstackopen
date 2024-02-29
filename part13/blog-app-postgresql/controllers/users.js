@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const { User } = require("../models");
+const { User, Blog } = require("../models");
 
 router.get("/", async (req, res) => {
   const users = await User.findAll({
     include: {
-      model: Note,
+      model: Blog,
       attributes: { exclude: ["userId"] },
     },
   });
