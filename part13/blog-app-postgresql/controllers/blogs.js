@@ -3,20 +3,20 @@ const Blog = require("../models/blog");
 const router = express.Router();
 
 // GET all blogs
-router.get("/api/blogs", async (req, res) => {
+router.get("/", async (req, res) => {
   const blogs = await Blog.findAll();
   console.log(JSON.stringify(blogs, null, 2));
   res.json(blogs);
 });
 
 // CREATE a blog
-router.post("/api/blogs", async (req, res) => {
+router.post("/", async (req, res) => {
   const blog = await Blog.create(req.body);
   return res.json(blog);
 });
 
 // GET single blog
-router.get("/api/blogs/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   const blog = await Blog.findByPk(req.params.id);
   if (blog) {
     console.log("BLOG:", blog.toJSON());
@@ -27,7 +27,7 @@ router.get("/api/blogs/:id", async (req, res) => {
 });
 
 // DELETE a blog
-router.delete("/api/blogs/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const blog = await Blog.findByPk(req.params.id);
   if (blog) {
     await blog.destroy();
@@ -38,7 +38,7 @@ router.delete("/api/blogs/:id", async (req, res) => {
 });
 
 // UPDATE Blog likes
-router.put("/api/blogs/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { likes } = req.body;
 
