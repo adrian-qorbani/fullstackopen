@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+require('express-async-errors')
 const db = require("./utils/db");
 const blogRoute = require("./controllers/blogs");
 
@@ -17,6 +18,12 @@ db.authenticate()
 
 // Include routes
 app.use(blogRoute);
+
+// Error handling Middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal server error.' });
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
