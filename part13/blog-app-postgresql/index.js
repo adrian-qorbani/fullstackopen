@@ -1,70 +1,22 @@
 require("dotenv").config();
-
-const { Sequelize, Model, DataTypes } = require("sequelize");
 const express = require("express");
 const app = express();
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialectOptions: {
-    // ssl: {
-    //   require: true,
-    //   rejectUnauthorized: false
-    // }
-  },
-});
+const db = require("./db");
+const routes = require("./routes");
 
 app.use(express.json());
 
-class Blog extends Model {}
-Blog.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    title: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    author: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    url: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    date: {
-      type: DataTypes.DATE,
-    },
-    likes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-  },
-  {
-    sequelize,
-    underscored: true,
-    timestamps: false,
-    modelName: "blog",
-  }
-);
+// Initialize database connection
+db.authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
-// GET ALL Blogs
-app.get("/api/blogs", async (req, res) => {
-  const blogs = await Blog.findAll();
-  res.json(blogs);
-});
-
-// CREATE A Blog
-app.post("/api/blogs", async (req, res) => {
-  try {
-    const blog = await Blog.create(req.body);
-    return res.json(blog);
-  } catch (error) {
-    return res.status(400).json({ error });
-  }
-});
+// Include routes
+app.use(routes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
