@@ -18,19 +18,17 @@ const tokenExtractor = (req, res, next) => {
   next();
 };
 
-
-
 // GET all blogs
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   const blogs = await Blog.findAll({
-    attributes: { exclude: ['userId'] },
+    attributes: { exclude: ["userId"] },
     include: {
       model: User,
-      attributes: ['name']
-    }
-  })
-  res.json(blogs)
-})
+      attributes: ["name"],
+    },
+  });
+  res.json(blogs);
+});
 // CREATE a blog
 router.post("/", tokenExtractor, async (req, res) => {
   // const blog = await Blog.create(req.body);
@@ -56,13 +54,32 @@ router.get("/:id", async (req, res) => {
 });
 
 // DELETE a blog
-router.delete("/:id", async (req, res) => {
-  const blog = await Blog.findByPk(req.params.id);
-  if (blog) {
+// router.delete("/:id", async (req, res) => {
+//   const blog = await Blog.findByPk(req.params.id);
+//   if (blog) {
+//     await blog.destroy();
+//     res.status(204).end();
+//   } else {
+//     res.status(404).end();
+//   }
+// });
+router.delete("/:id", tokenExtractor, async (req, res) => {
+  try {
+    const blog = await Blog.findByPk(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found." });
+    }
+
+    if (blog.userId !== req.decodedToken.id) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to delete this blog." });
+    }
+
     await blog.destroy();
     res.status(204).end();
-  } else {
-    res.status(404).end();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
