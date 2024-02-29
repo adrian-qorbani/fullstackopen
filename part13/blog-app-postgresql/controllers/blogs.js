@@ -3,7 +3,7 @@ const express = require("express");
 const { Blog, User } = require("../models");
 const router = express.Router();
 
-// TEMP: MIDDLEWARE
+// TEMP: MIDDLEWAREs (will move to its own module soon)
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get("authorization");
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
@@ -17,6 +17,8 @@ const tokenExtractor = (req, res, next) => {
   }
   next();
 };
+
+
 
 // GET all blogs
 router.get('/', async (req, res) => {
