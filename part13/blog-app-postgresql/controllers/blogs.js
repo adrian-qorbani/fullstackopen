@@ -1,5 +1,6 @@
 const express = require("express");
-const Blog = require("../models/blog");
+// const Blog = require("../models/blog");
+const { Blog } = require("../models");
 const router = express.Router();
 
 // GET all blogs

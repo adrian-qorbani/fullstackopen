@@ -1,10 +1,10 @@
-const Note = require("./blog");
+const Blog = require("./blog");
 const User = require("./user");
 
 Note.sync();
 User.sync();
 
 module.exports = {
-  Note,
+  Blog,
   User,
 };
