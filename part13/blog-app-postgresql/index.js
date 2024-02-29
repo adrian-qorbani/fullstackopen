@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const db = require("./db");
-const routes = require("./routes");
+const db = require("./utils/db");
+const blogRoute = require("./controllers/blogs");
 
 app.use(express.json());
 
@@ -16,7 +16,7 @@ db.authenticate()
   });
 
 // Include routes
-app.use(routes);
+app.use(blogRoute);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const Blog = require('./blog');
-const sequelize = require('./db')
+const sequelize = require('./utils/db')
 
 async function printBlogs() {
   try {
