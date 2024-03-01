@@ -2,6 +2,7 @@ const express = require("express");
 // const Blog = require("../models/blog");
 const { Blog, User } = require("../models");
 const router = express.Router();
+const { Op } = require("sequelize");
 
 // TEMP: MIDDLEWAREs (will move to its own module soon)
 const tokenExtractor = (req, res, next) => {
@@ -19,16 +20,37 @@ const tokenExtractor = (req, res, next) => {
 };
 
 // GET all blogs
-router.get("/", async (req, res) => {
-  const blogs = await Blog.findAll({
-    attributes: { exclude: ["userId"] },
-    include: {
-      model: User,
-      attributes: ["name"],
-    },
-  });
-  res.json(blogs);
+router.get("/", async (req, res, next) => {
+  try {
+    const { search } = req.query;
+    console.log("Search term:", search);
+    let blogs;
+
+    const whereClause = {};
+
+    if (search) {
+      whereClause.title = {
+        [Op.iLike]: `%${search}%`
+      };
+    }
+
+    blogs = await Blog.findAll({
+      attributes: { exclude: ["userId"] },
+      include: {
+        model: User,
+        attributes: ["name"],
+      },
+      where: whereClause,
+      order: [["likes", "DESC"]] // Order by likes in descending order
+    });
+
+    res.json(blogs);
+  } catch (error) {
+    console.error("Error fetching blogs:", error); 
+    next(error); 
+  }
 });
+
 // CREATE a blog
 router.post("/", tokenExtractor, async (req, res) => {
   // const blog = await Blog.create(req.body);

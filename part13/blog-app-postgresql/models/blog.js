@@ -22,9 +22,9 @@ Blog.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    date: {
-      type: DataTypes.DATE,
-    },
+    // date: {
+    //   type: DataTypes.DATE,
+    // },
     likes: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
