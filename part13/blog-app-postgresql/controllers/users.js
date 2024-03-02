@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
-const { User, Blog } = require("../models");
+const { User, Blog, ReadingList } = require("../models");
 
 router.get("/", async (req, res) => {
   const users = await User.findAll({
@@ -34,9 +34,25 @@ router.get("/:id", async (req, res) => {
     });
 
     if (user) {
-      res.json(user);
+      // Transform the reading list to include additional information
+      const transformedReadingList = user.reading_lists.map(item => ({
+        id: item.id,
+        unread: item.unread,
+        blog: {
+          id: item.blog.id,
+          title: item.blog.title,
+          // Add other blog properties as needed
+        }
+      }));
+
+      res.json({
+        id: user.id,
+        username: user.username,
+        // Include other user properties as needed
+        reading_list: transformedReadingList
+      });
     } else {
-      res.status(404).json({ message: 'User not found.' });
+      res.status(404).json({ message: 'User not found' });
     }
   } catch (error) {
     console.error('Error fetching user and reading list:', error);
