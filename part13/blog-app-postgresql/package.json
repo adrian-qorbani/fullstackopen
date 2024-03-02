@@ -9,5 +9,9 @@
   },
   "devDependencies": {
     "jsonwebtoken": "^9.0.2"
-  }
+  },
+  "scripts": {
+    "dev": "nodemon index.js",
+    "migration:down": "node util/rollback.js"
+  },
 }

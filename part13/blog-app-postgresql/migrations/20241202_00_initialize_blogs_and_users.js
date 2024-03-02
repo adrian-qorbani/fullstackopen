@@ -20,12 +20,19 @@ module.exports = {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      //   date: {
-      //     type: DataTypes.DATE,
-      //   },
       likes: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
       },
     });
     await queryInterface.createTable("users", {
@@ -43,6 +50,16 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
     });
     await queryInterface.addColumn("blogs", "user_id", {
       type: DataTypes.INTEGER,
@@ -51,6 +68,7 @@ module.exports = {
     });
   },
   down: async ({ context: queryInterface }) => {
+    await queryInterface.removeColumn("blogs", "user_id");
     await queryInterface.dropTable("blogs");
     await queryInterface.dropTable("users");
   },
