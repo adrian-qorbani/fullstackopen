@@ -22,11 +22,25 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const user = await User.findByPk(req.params.id);
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).end();
+  try {
+    const userId = req.params.id;
+    const user = await User.findByPk(userId, {
+      include: [{
+        model: ReadingList,
+        include: [{
+          model: Blog,
+        }]
+      }]
+    });
+
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: 'User not found.' });
+    }
+  } catch (error) {
+    console.error('Error fetching user and reading list:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

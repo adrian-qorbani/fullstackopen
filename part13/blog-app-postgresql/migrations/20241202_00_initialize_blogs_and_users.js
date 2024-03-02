@@ -24,6 +24,11 @@ module.exports = {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      unread: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true, // Default to unread
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -66,10 +71,16 @@ module.exports = {
       allowNull: false,
       references: { model: "users", key: "id" },
     });
+    await queryInterface.addConstraint("reading_list", {
+      fields: ['user_id', 'blog_id'],
+      type: 'unique',
+      name: 'unique_user_blog_readinglist'
+    });
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn("blogs", "user_id");
     await queryInterface.dropTable("blogs");
     await queryInterface.dropTable("users");
+    await queryInterface.dropTable("reading_list");
   },
 };
