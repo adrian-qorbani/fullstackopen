@@ -24,31 +24,34 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findByPk(userId, {
+    const { read } = req.query;
+
+    const includeObj = {
+      model: ReadingList,
       include: [{
-        model: ReadingList,
-        include: [{
-          model: Blog,
-        }]
+        model: Blog,
       }]
-    });
+    };
+
+    if (read !== undefined) {
+      includeObj.where = { unread: read === 'true' ? false : true };
+    }
+
+    const user = await User.findByPk(userId, { include: [includeObj] });
 
     if (user) {
-      // Transform the reading list to include additional information
       const transformedReadingList = user.reading_lists.map(item => ({
         id: item.id,
         unread: item.unread,
         blog: {
           id: item.blog.id,
           title: item.blog.title,
-          // Add other blog properties as needed
         }
       }));
 
       res.json({
         id: user.id,
         username: user.username,
-        // Include other user properties as needed
         reading_list: transformedReadingList
       });
     } else {
